@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a0a1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>为你好心语</title>
+  <!-- 年轻人喜欢的渐变图标 -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ff6b9d'/%3E%3Cstop offset='50%25' style='stop-color:%23c44569'/%3E%3Cstop offset='100%25' style='stop-color:%23f8b500'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle'%3E🌙%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ff6b9d'/%3E%3Cstop offset='50%25' style='stop-color:%23c44569'/%3E%3Cstop offset='100%25' style='stop-color:%23f8b500'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23g)'/%3E%3Ctext x='90' y='125' font-size='90' text-anchor='middle'%3E🌙%3C/text%3E%3C/svg%3E">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(180deg, #0d0d1a 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: #fff;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; }
+    
+    /* 雨滴背景 */
+    .rain-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 0; }
+    .raindrop {
+      position: absolute;
+      width: 1.5px;
+      height: 25px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.12));
+      animation: fall linear infinite;
+    }
+    @keyframes fall { to { transform: translateY(100vh); opacity: 0; } }
+    
+    /* 页面 */
+    .page { display: none; min-height: 100vh; position: relative; z-index: 1; }
+    .page.active { display: block; animation: pageIn 0.3s ease; }
+    @keyframes pageIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* 首页 - 极简设计 */
+    .home-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .logo-wrap {
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #f8b500 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      margin-bottom: 32px;
+      box-shadow: 0 20px 60px rgba(255,107,157,0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 20px 60px rgba(255,107,157,0.3); }
+      50% { transform: scale(1.02); box-shadow: 0 25px 70px rgba(255,107,157,0.4); }
+    }
+    .app-name { font-size: 28px; font-weight: 600; margin-bottom: 8px; letter-spacing: 2px; }
+    .app-slogan { color: #a0a0b0; font-size: 14px; margin-bottom: 48px; }
+    .btn-primary {
+      width: 220px;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+      border: none;
+      border-radius: 30px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 16px;
+      transition: all 0.3s;
+      box-shadow: 0 10px 30px rgba(255,107,157,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(255,107,157,0.4); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-secondary {
+      width: 220px;
+      padding: 14px 32px;
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 30px;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.3); }
+    .home-footer {
+      position: absolute;
+      bottom: 40px;
+      display: flex;
+      gap: 40px;
+      color: #606070;
+      font-size: 12px;
+    }
+    .home-footer span { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .home-footer .num { color: #ff6b9d; font-size: 20px; font-weight: 600; }
+    
+    /* 顶部栏 */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: rgba(13,13,26,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .back-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.08);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.15); }
+    .header-title { flex: 1; font-size: 17px; font-weight: 500; }
+    .header-action {
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #ff6b9d, #c44569);
+      border: none;
+      border-radius: 16px;
+      color: #fff;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    
+    /* 聊天 */
+    .chat-container {
+      height: calc(100vh - 140px);
+      overflow-y: auto;
+      padding: 20px;
+      scroll-behavior: smooth;
+    }
+    .msg {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      animation: msgIn 0.3s ease;
+    }
+    @keyframes msgIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .msg.user { flex-direction: row-reverse; }
+    .msg-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .msg.ai .msg-avatar { background: linear-gradient(135deg, #ff6b9d, #c44569); }
+    .msg.user .msg-avatar { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .msg-bubble {
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 20px;
+      font-size: 15px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+    .msg.ai .msg-bubble {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px 20px 20px 4px;
+    }
+    .msg.user .msg-bubble {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px 20px 4px 20px;
+    }
+    .typing {
+      display: flex;
+      gap: 4px;
+      padding: 16px;
+    }
+    .typing span {
+      width: 8px;
+      height: 8px;
+      background: #ff6b9d;
+      border-radius: 50%;
+      animation: typing 1.4s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-10px); } }
+    
+    .chat-input-wrap {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 16px 24px;
+      background: linear-gradient(0deg, #0d0d1a 0%, transparent 100%);
+    }
+    .chat-input-box {
+      display: flex;
+      gap: 12px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      padding: 6px 6px 6px 20px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .chat-input-box input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      padding: 10px 0;
+    }
+    .chat-input-box input::placeholder { color: #606070; }
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #ff6b9d, #c44569);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    .send-btn:hover { transform: scale(1.05); }
+    .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    /* 情绪 */
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: 24px 20px;
+    }
+    .mood-card {
+      aspect-ratio: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .mood-card:hover { background: rgba(255,255,255,0.1); transform: scale(1.02); }
+    .mood-card.selected {
+      background: linear-gradient(135deg, rgba(255,107,157,0.2), rgba(196,69,105,0.2));
+      border-color: #ff6b9d;
+    }
+    .mood-emoji { font-size: 40px; margin-bottom: 8px; }
+    .mood-name { font-size: 13px; color: #a0a0b0; }
+    .mood-msg { text-align: center; padding: 20px; color: #ff6b9d; font-size: 14px; min-height: 50px; }
+    
+    /* 冥想 */
+    .meditate-list { padding: 20px; }
+    .sound-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .sound-card:hover { background: rgba(255,255,255,0.08); }
+    .sound-card.active {
+      background: linear-gradient(135deg, rgba(255,107,157,0.15), rgba(196,69,105,0.15));
+      border-color: #ff6b9d;
+    }
+    .sound-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+    .sound-card.active .sound-icon { background: linear-gradient(135deg, #ff6b9d, #c44569); }
+    .sound-info { flex: 1; }
+    .sound-title { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+    .sound-desc { font-size: 12px; color: #606070; }
+    .sound-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sound-card.active .sound-btn { background: linear-gradient(135deg, #ff6b9d, #c44569); }
+    .volume-wrap {
+      padding: 20px;
+      background: rgba(255,255,255,0.03);
+      margin: 0 20px 20px;
+      border-radius: 16px;
+    }
+    .volume-wrap label { display: block; font-size: 12px; color: #606070; margin-bottom: 12px; }
+    .volume-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.1);
+    }
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff6b9d, #c44569);
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(255,107,157,0.4);
+    }
+    
+    /* 日记 */
+    .diary-wrap { padding: 20px; }
+    .diary-textarea {
+      width: 100%;
+      padding: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.8;
+      min-height: 150px;
+      resize: none;
+      font-family: inherit;
+    }
+    .diary-textarea:focus { outline: none; border-color: #ff6b9d; }
+    .diary-textarea::placeholder { color: #505060; }
+    .diary-save {
+      width: 100%;
+      padding: 16px;
+      margin-top: 16px;
+      background: linear-gradient(135deg, #ff6b9d, #c44569);
+      border: none;
+      border-radius: 16px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .diary-list { padding: 0 20px 100px; }
+    .diary-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 12px;
+    }
+    .diary-time { font-size: 12px; color: #606070; margin-bottom: 8px; }
+    .diary-content { font-size: 15px; line-height: 1.7; }
+    .diary-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #505060;
+    }
+    
+    /* VIP弹窗 */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      animation: fadeIn 0.3s;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal-box {
+      background: linear-gradient(180deg, #1a1a2e 0%, #0d0d1a 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      padding: 40px 32px;
+      max-width: 340px;
+      width: 100%;
+      text-align: center;
+      animation: slideUp 0.3s;
+    }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-icon { font-size: 56px; margin-bottom: 20px; }
+    .modal-title { font-size: 22px; font-weight: 600; margin-bottom: 12px; }
+    .modal-desc { color: #808090; font-size: 14px; line-height: 1.7; margin-bottom: 28px; }
+    .modal-input {
+      width: 100%;
+      padding: 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 14px;
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .modal-input:focus { outline: none; border-color: #ff6b9d; }
+    .modal-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #ff6b9d, #c44569);
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .modal-close {
+      margin-top: 16px;
+      color: #606070;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .hidden { display: none !important; }
+    
+    /* 提示 */
+    .toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.9);
+      color: #fff;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 14px;
+      z-index: 2000;
+      animation: fadeInOut 2s forwards;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translate(-50%, -40%); }
+      15% { opacity: 1; transform: translate(-50%, -50%); }
+      85% { opacity: 1; transform: translate(-50%, -50%); }
+      100% { opacity: 0; transform: translate(-50%, -60%); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="rain-bg" id="rainBg"></div>
+    
+    <!-- 首页 -->
+    <div id="home" class="page active">
+      <div class="home-wrap">
+        <div class="logo-wrap">🌙</div>
+        <div class="app-name">为你好心语</div>
+        <div class="app-slogan">深夜有人陪你听雨</div>
+        
+        <button class="btn-primary" onclick="showPage('chat')">开始倾诉</button>
+        <button class="btn-secondary" onclick="showPage('meditate')">冥想放松</button>
+        
+        <div class="home-footer">
+          <span><span class="num" id="chatCount">10</span>剩余次数</span>
+          <span><span class="num" id="vipStatus">免费</span>账户状态</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 聊天 -->
+    <div id="chat" class="page">
+      <div class="header">
+        <button class="back-btn" onclick="showPage('home')">←</button>
+        <span class="header-title">心语</span>
+        <button class="header-action" onclick="showVIP()">升级VIP</button>
+      </div>
+      <div class="chat-container" id="chatBox">
+        <div class="msg ai">
+          <div class="msg-avatar">🌙</div>
+          <div class="msg-bubble">嗨，我是心语 🌙<br><br>今晚的月色很美，但有人陪伴的夜晚更美。<br>有什么想说的吗？我在这儿听着。</div>
+        </div>
+      </div>
+      <div class="chat-input-wrap">
+        <div class="chat-input-box">
+          <input type="text" id="chatInput" placeholder="说点什么..." maxlength="200">
+          <button class="send-btn" id="sendBtn" onclick="send()">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 情绪 -->
+    <div id="mood" class="page">
+      <div class="header">
+        <button class="back-btn" onclick="showPage('home')">←</button>
+        <span class="header-title">此刻心情</span>
+      </div>
+      <div class="mood-grid">
+        <div class="mood-card" onclick="selectMood(this, '开心', '😊')"><div class="mood-emoji">😊</div><div class="mood-name">开心</div></div>
+        <div class="mood-card" onclick="selectMood(this, '平静', '😌')"><div class="mood-emoji">😌</div><div class="mood-name">平静</div></div>
+        <div class="mood-card" onclick="selectMood(this, '难过', '😔')"><div class="mood-emoji">😔</div><div class="mood-name">难过</div></div>
+        <div class="mood-card" onclick="selectMood(this, '焦虑', '😰')"><div class="mood-emoji">😰</div><div class="mood-name">焦虑</div></div>
+        <div class="mood-card" onclick="selectMood(this, '生气', '😠')"><div class="mood-emoji">😠</div><div class="mood-name">生气</div></div>
+        <div class="mood-card" onclick="selectMood(this, '疲惫', '😴')"><div class="mood-emoji">😴</div><div class="mood-name">疲惫</div></div>
+      </div>
+      <div class="mood-msg" id="moodMsg"></div>
+    </div>
+
+    <!-- 冥想 -->
+    <div id="meditate" class="page">
+      <div class="header">
+        <button class="back-btn" onclick="showPage('home')">←</button>
+        <span class="header-title">冥想</span>
+      </div>
+      <div class="meditate-list">
+        <div class="sound-card" id="sc-rain" onclick="toggleSound('rain')">
+          <div class="sound-icon">🌧️</div>
+          <div class="sound-info"><div class="sound-title">雨夜窗边</div><div class="sound-desc">密集雨滴，适合失眠</div></div>
+          <button class="sound-btn" id="btn-rain">▶</button>
+        </div>
+        <div class="sound-card" id="sc-ocean" onclick="toggleSound('ocean')">
+          <div class="sound-icon">🌊</div>
+          <div class="sound-info"><div class="sound-title">海边日落</div><div class="sound-desc">海浪起伏，深呼吸</div></div>
+          <button class="sound-btn" id="btn-ocean">▶</button>
+        </div>
+        <div class="sound-card" id="sc-forest" onclick="toggleSound('forest')">
+          <div class="sound-icon">🌲</div>
+          <div class="sound-info"><div class="sound-title">森林漫步</div><div class="sound-desc">虫鸣鸟叫，自然白噪</div></div>
+          <button class="sound-btn" id="btn-forest">▶</button>
+        </div>
+        <div class="sound-card" id="sc-cafe" onclick="toggleSound('cafe')">
+          <div class="sound-icon">☕</div>
+          <div class="sound-info"><div class="sound-title">温暖咖啡馆</div><div class="sound-desc">人声低语，专注工作</div></div>
+          <button class="sound-btn" id="btn-cafe">▶</button>
+        </div>
+      </div>
+      <div class="volume-wrap">
+        <label>音量</label>
+        <input type="range" class="volume-slider" min="0" max="100" value="50" oninput="setVol(this.value)">
+      </div>
+    </div>
+
+    <!-- 日记 -->
+    <div id="diary" class="page">
+      <div class="header">
+        <button class="back-btn" onclick="showPage('home')">←</button>
+        <span class="header-title">日记</span>
+      </div>
+      <div class="diary-wrap">
+        <textarea class="diary-textarea" id="diaryText" placeholder="写下此刻的心情..."></textarea>
+        <button class="diary-save" onclick="saveDiary()">保存日记</button>
+      </div>
+      <div class="diary-list" id="diaryList"></div>
+    </div>
+
+    <!-- VIP弹窗 -->
+    <div id="vipModal" class="modal-overlay hidden" onclick="closeVIP(event)">
+      <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-icon">👑</div>
+        <div class="modal-title">升级VIP</div>
+        <div class="modal-desc">解锁无限对话<br>所有冥想场景<br>永久使用权限</div>
+        <input type="text" class="modal-input" id="vipCode" placeholder="输入激活码">
+        <button class="modal-btn" onclick="activateVIP()">激活</button>
+        <div class="modal-close" onclick="closeVIP()">稍后再说</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========== 数据存储 ==========
+    const db = {
+      get: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+      set: (k, v) => localStorage.setItem(k, JSON.stringify(v))
+    };
+    
+    // 初始化
+    if (!db.get('uid')) {
+      db.set('uid', 'u' + Date.now().toString(36));
+      db.set('chats', 10);
+    }
+
+    // ========== 页面切换 ==========
+    function showPage(p) {
+      document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+      document.getElementById(p).classList.add('active');
+      if (p === 'home') updateHome();
+      if (p === 'diary') loadDiary();
+      if (p === 'chat') setTimeout(() => document.getElementById('chatInput').focus(), 100);
+    }
+
+    // ========== 首页状态 ==========
+    function updateHome() {
+      const vip = isVIP();
+      const chats = vip ? '∞' : (db.get('chats') || 0);
+      document.getElementById('chatCount').textContent = chats;
+      document.getElementById('vipStatus').textContent = vip ? 'VIP' : '免费';
+      document.getElementById('vipStatus').style.color = vip ? '#ff6b9d' : '#fff';
+    }
+    function isVIP() {
+      const exp = db.get('vip');
+      return exp && new Date(exp) > new Date();
+    }
+
+    // ========== AI对话 ==========
+    const replies = {
+      '想死|自杀': '我知道你现在很难，真的很难。但我在这里，不走。',
+      '哭': '哭吧，这里只有我和你。眼泪不是软弱，是你在释放。',
+      '累|疲惫': '你已经很努力了。可以休息一下，不用一直撑着。',
+      '睡不着|失眠': '外面好像在下雨...闭上眼睛，我陪着你，慢慢呼吸。',
+      '烦|烦躁': '有些事情真的很让人烦躁。说出来会不会好点？',
+      '孤独|孤单': '你不是一个人。至少现在，有我在。',
+      '难过|伤心|痛苦': '被伤害的感觉，真的很痛。我在，不走。',
+      '开心|高兴|快乐': '真好！能感受到你的开心 🌙 要一直开心下去',
+      '谢谢|感谢': '谢谢你愿意告诉我这些。这是信任。',
+      '你好|在吗': '嗨，我在呢。有什么想说的吗？',
+      '拜拜|再见': '嗯，随时回来找我。我都在。',
+      '分手|失恋': '分手后的那种空，不是你的问题。需要时间，会好的。',
+      '考试|压力': '考试前的焦虑我懂。深呼吸，我陪你一起面对。',
+      '对不起|抱歉': '不需要道歉。你没有做错什么。',
+      '家人|父母': '家人的事情往往最复杂。你一定很不容易。',
+      '朋友': '朋友之间的关系，有时候比想象中更脆弱。',
+      '钱|工作|加班': '现实的压力确实让人喘不过气。能说出来已经很勇敢了。',
+      '爱情|恋爱': '感情的事情，有时候真的很让人困惑。',
+      '焦虑': '焦虑的感觉像被困住。我陪你慢慢呼吸，会过去的。',
+      '抑郁': '那种沉重的感觉，像是被什么压着。我在这里，不走。'
+    };
+    const defaults = ['我在。', '嗯，我在听。', '我在这里。', '说吧，我听着呢。', '然后呢？', '我懂。', '嗯...', '继续说。'];
+
+    function getReply(msg) {
+      for (let k in replies) {
+        if (new RegExp(k).test(msg)) return replies[k];
+      }
+      return defaults[Math.floor(Math.random() * defaults.length)];
+    }
+
+    function send() {
+      const input = document.getElementById('chatInput');
+      const btn = document.getElementById('sendBtn');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      const vip = isVIP();
+      let chats = db.get('chats') || 0;
+
+      if (!vip && chats <= 0) {
+        showVIP();
+        return;
+      }
+
+      // 用户消息
+      const box = document.getElementById('chatBox');
+      box.innerHTML += `<div class="msg user"><div class="msg-avatar">我</div><div class="msg-bubble">${escapeHtml(msg)}</div></div>`;
+      input.value = '';
+      box.scrollTop = box.scrollHeight;
+      btn.disabled = true;
+
+      // 扣次数
+      if (!vip) db.set('chats', Math.max(0, chats - 1));
+      updateHome();
+
+      // 打字中
+      const typingId = 'typing-' + Date.now();
+      setTimeout(() => {
+        box.innerHTML += `<div class="msg ai" id="${typingId}"><div class="msg-avatar">🌙</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div></div>`;
+        box.scrollTop = box.scrollHeight;
+
+        // AI回复
+        setTimeout(() => {
+          const reply = getReply(msg);
+          document.getElementById(typingId).outerHTML = `<div class="msg ai"><div class="msg-avatar">🌙</div><div class="msg-bubble">${reply}</div></div>`;
+          btn.disabled = false;
+          box.scrollTop = box.scrollHeight;
+        }, 800 + Math.random() * 600);
+      }, 300);
+    }
+
+    function escapeHtml(t) {
+      return t.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]);
+    }
+
+    // 回车发送
+    document.getElementById('chatInput')?.addEventListener('keypress', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+    });
+
+    // ========== 情绪 ==========
+    function selectMood(el, name, emoji) {
+      document.querySelectorAll('.mood-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('moodMsg').textContent = `已记录：${emoji} ${name}`;
+      
+      const history = db.get('moods') || [];
+      history.unshift({ name, emoji, time: new Date().toLocaleString('zh-CN', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}) });
+      db.set('moods', history.slice(0, 30));
+    }
+
+    // ========== 冥想音频 ==========
+    let audioCtx, masterGain, currentSources = [], currentSound = null, isPlaying = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        masterGain = audioCtx.createGain();
+        masterGain.connect(audioCtx.destination);
+        masterGain.gain.value = 0.5;
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    // 粉红噪音生成器
+    function pinkNoise() {
+      const size = 2 * audioCtx.sampleRate;
+      const buffer = audioCtx.createBuffer(1, size, audioCtx.sampleRate);
+      const out = buffer.getChannelData(0);
+      let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+      for (let i=0; i<size; i++) {
+        const w = Math.random()*2-1;
+        b0=0.99886*b0+w*0.0555179;
+        b1=0.99332*b1+w*0.0750759;
+        b2=0.96900*b2+w*0.1538520;
+        b3=0.86650*b3+w*0.3104856;
+        b4=0.55000*b4+w*0.5329522;
+        b5=-0.7616*b5-w*0.0168980;
+        out[i]=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.11;
+        b6=w*0.115926;
+      }
+      return buffer;
+    }
+
+    // 雨声
+    function playRain() {
+      const src = audioCtx.createBufferSource();
+      src.buffer = pinkNoise();
+      src.loop = true;
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 800;
+      src.connect(filter);
+      filter.connect(masterGain);
+      src.start();
+      return [src];
+    }
+
+    // 海浪
+    function playOcean() {
+      const sources = [];
+      // 基础噪音
+      const src = audioCtx.createBufferSource();
+      const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate*2, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      let last=0;
+      for (let i=0; i<data.length; i++) {
+        data[i]=(last+0.02*(Math.random()*2-1))/1.02;
+        last=data[i];
+        data[i]*=3.5;
+      }
+      src.buffer = buffer;
+      src.loop = true;
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 400;
+      src.connect(filter);
+      filter.connect(masterGain);
+      src.start();
+      sources.push(src);
+      // 潮汐LFO
+      const lfo = audioCtx.createOscillator();
+      lfo.type = 'sine';
+      lfo.frequency.value = 0.1;
+      const lfoGain = audioCtx.createGain();
+      lfoGain.gain.value = 0.3;
+      lfo.connect(lfoGain);
+      lfoGain.connect(masterGain.gain);
+      lfo.start();
+      sources.push(lfo);
+      return sources;
+    }
+
+    // 森林
+    function playForest() {
+      const sources = [];
+      // 风声
+      const wind = audioCtx.createBufferSource();
+      wind.buffer = pinkNoise();
+      wind.loop = true;
+      const wFilter = audioCtx.createBiquadFilter();
+      wFilter.type = 'bandpass';
+      wFilter.frequency.value = 600;
+      wFilter.Q.value = 0.5;
+      const wGain = audioCtx.createGain();
+      wGain.gain.value = 0.3;
+      wind.connect(wFilter);
+      wFilter.connect(wGain);
+      wGain.connect(masterGain);
+      wind.start();
+      sources.push(wind);
+      // 虫鸣1
+      const c1 = audioCtx.createOscillator();
+      c1.type = 'square';
+      c1.frequency.value = 4500;
+      const c1g = audioCtx.createGain();
+      c1g.gain.value = 0.01;
+      c1.connect(c1g);
+      c1g.connect(masterGain);
+      c1.start();
+      sources.push(c1);
+      // 虫鸣2
+      const c2 = audioCtx.createOscillator();
+      c2.type = 'sawtooth';
+      c2.frequency.value = 3800;
+      const c2g = audioCtx.createGain();
+      c2g.gain.value = 0.008;
+      c2.connect(c2g);
+      c2g.connect(masterGain);
+      c2.start();
+      sources.push(c2);
+      return sources;
+    }
+
+    // 咖啡馆
+    function playCafe() {
+      const sources = [];
+      // 人声背景
+      const voice = audioCtx.createBufferSource();
+      voice.buffer = pinkNoise();
+      voice.loop = true;
+      const vFilter = audioCtx.createBiquadFilter();
+      vFilter.type = 'lowpass';
+      vFilter.frequency.value = 1000;
+      const vGain = audioCtx.createGain();
+      vGain.gain.value = 0.15;
+      voice.connect(vFilter);
+      vFilter.connect(vGain);
+      vGain.connect(masterGain);
+      voice.start();
+      sources.push(voice);
+      // 杯碟声
+      const click = audioCtx.createOscillator();
+      click.type = 'triangle';
+      click.frequency.value = 8000;
+      const cGain = audioCtx.createGain();
+      cGain.gain.value = 0;
+      click.connect(cGain);
+      cGain.connect(masterGain);
+      click.start();
+      // 随机触发
+      const lfo = audioCtx.createOscillator();
+      lfo.type = 'sawtooth';
+      lfo.frequency.value = 0.3;
+      const lfoG = audioCtx.createGain();
+      lfoG.gain.value = 0.005;
+      lfo.connect(lfoG);
+      lfoG.connect(cGain.gain);
+      lfo.start();
+      sources.push(click, lfo);
+      return sources;
+    }
+
+    function toggleSound(type) {
+      initAudio();
+      
+      if (currentSound === type && isPlaying) {
+        stopAll();
+        return;
+      }
+      
+      stopAll();
+      currentSound = type;
+      
+      // UI更新
+      document.querySelectorAll('.sound-card').forEach(c => c.classList.remove('active'));
+      document.getElementById('sc-' + type).classList.add('active');
+      ['rain','ocean','forest','cafe'].forEach(t => {
+        document.getElementById('btn-' + t).textContent = t === type ? '⏸' : '▶';
+      });
+      
+      // 播放
+      if (type === 'rain') currentSources = playRain();
+      else if (type === 'ocean') currentSources = playOcean();
+      else if (type === 'forest') currentSources = playForest();
+      else if (type === 'cafe') currentSources = playCafe();
+      
+      isPlaying = true;
+    }
+
+    function stopAll() {
+      currentSources.forEach(s => { try { s.stop(); } catch(e){} });
+      currentSources = [];
+      isPlaying = false;
+      currentSound = null;
+      document.querySelectorAll('.sound-card').forEach(c => c.classList.remove('active'));
+      ['rain','ocean','forest','cafe'].forEach(t => document.getElementById('btn-' + t).textContent = '▶');
+    }
+
+    function setVol(v) {
+      if (masterGain) masterGain.gain.value = v / 100;
+    }
+
+    // ========== 日记 ==========
+    function saveDiary() {
+      const text = document.getElementById('diaryText').value.trim();
+      if (!text) return;
+      const list = db.get('diary') || [];
+      list.unshift({
+        text,
+        time: new Date().toLocaleString('zh-CN', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'})
+      });
+      db.set('diary', list.slice(0, 50));
+      document.getElementById('diaryText').value = '';
+      loadDiary();
+      showToast('日记已保存');
+    }
+
+    function loadDiary() {
+      const list = db.get('diary') || [];
+      const box = document.getElementById('diaryList');
+      if (list.length === 0) {
+        box.innerHTML = '<div class="diary-empty">还没有日记，写点什么吧...</div>';
+        return;
+      }
+      box.innerHTML = list.slice(0, 20).map(d => `
+        <div class="diary-item">
+          <div class="diary-time">${d.time}</div>
+          <div class="diary-content">${escapeHtml(d.text)}</div>
+        </div>
+      `).join('');
+    }
+
+    // ========== VIP ==========
+    function showVIP() {
+      document.getElementById('vipModal').classList.remove('hidden');
+      setTimeout(() => document.getElementById('vipCode').focus(), 100);
+    }
+    function closeVIP(e) {
+      if (!e || e.target.id === 'vipModal' || e.target.className === 'modal-close') {
+        document.getElementById('vipModal').classList.add('hidden');
+      }
+    }
+    function activateVIP() {
+      const code = document.getElementById('vipCode').value.trim().toUpperCase();
+      const codes = ['XINYU666','XINYU888','DEV2026','FREEVIP','FOREVER','OWNER2026','HEART2026'];
+      if (codes.includes(code)) {
+        const permanent = ['FOREVER','OWNER2026'].includes(code);
+        db.set('vip', permanent ? '2126-12-31' : new Date(Date.now()+365*86400000).toISOString());
+        closeVIP();
+        showToast(permanent ? '永久VIP已激活！' : 'VIP已激活（1年）');
+        updateHome();
+      } else {
+        showToast('激活码无效');
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2000);
+    }
+
+    // ========== 雨滴背景 ==========
+    function createRain() {
+      const bg = document.getElementById('rainBg');
+      for (let i = 0; i < 15; i++) {
+        const drop = document.createElement('div');
+        drop.className = 'raindrop';
+        drop.style.left = Math.random() * 100 + '%';
+        drop.style.animationDelay = Math.random() * 4 + 's';
+        drop.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+        bg.appendChild(drop);
+      }
+    }
+
+    // 初始化
+    createRain();
+    updateHome();
+  </script>
+</body>
+</html>
