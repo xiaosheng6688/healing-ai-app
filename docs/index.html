@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>为你好心语 - AI情绪陪伴</title>
+  <title>为你好心语</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,22 +16,66 @@
     }
     .container { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; }
     
-    /* 雨滴动画 */
+    /* 雨滴 */
     .raindrop {
       position: fixed;
       width: 1px;
       height: 20px;
-      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2));
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.15));
       animation: fall linear infinite;
       pointer-events: none;
     }
-    @keyframes fall {
-      to { transform: translateY(100vh); }
-    }
+    @keyframes fall { to { transform: translateY(100vh); } }
     
     /* 页面 */
-    .page { display: none; min-height: 100vh; padding-bottom: 80px; }
+    .page { display: none; min-height: 100vh; padding-bottom: 100px; }
     .page.active { display: block; }
+    
+    /* 简洁首页 */
+    .home-simple {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .home-emoji { font-size: 100px; margin-bottom: 24px; animation: float 3s ease-in-out infinite; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .home-title { font-size: 32px; font-weight: 300; margin-bottom: 8px; }
+    .home-subtitle { color: #a855f7; font-size: 14px; margin-bottom: 40px; }
+    .home-btn {
+      width: 200px;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      border: none;
+      border-radius: 30px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 8px 0;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .home-btn:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(168,85,247,0.3); }
+    .home-btn.secondary {
+      background: transparent;
+      border: 1px solid rgba(168,85,247,0.5);
+    }
+    .home-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 40px;
+      padding: 20px 40px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+    }
+    .home-stat { text-align: center; }
+    .home-stat-num { font-size: 24px; color: #a855f7; }
+    .home-stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
     
     /* 顶部栏 */
     .header {
@@ -54,60 +98,10 @@
       border-radius: 8px; 
       color: #9ca3af;
       cursor: pointer;
+      font-size: 18px;
     }
     
-    /* 首页 */
-    .hero {
-      text-align: center;
-      padding: 40px 20px;
-    }
-    .hero-emoji { font-size: 80px; margin-bottom: 20px; }
-    .hero h1 { font-size: 28px; font-weight: 300; margin-bottom: 8px; }
-    .hero-subtitle { color: #a855f7; font-size: 14px; }
-    
-    .stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      padding: 0 16px;
-      margin-bottom: 20px;
-    }
-    .stat-box {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-    }
-    .stat-number { font-size: 32px; font-weight: 300; color: #a855f7; }
-    .stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
-    
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 20px;
-      margin: 12px 16px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .card:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
-    .card-title { font-size: 16px; margin-bottom: 4px; }
-    .card-desc { font-size: 12px; color: #64748b; }
-    
-    .btn {
-      width: calc(100% - 32px);
-      margin: 16px;
-      padding: 16px;
-      background: linear-gradient(135deg, #a855f7, #6366f1);
-      border: none;
-      border-radius: 12px;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    
-    /* 聊天页 */
+    /* 聊天 */
     .chat-box {
       height: calc(100vh - 180px);
       overflow-y: auto;
@@ -137,7 +131,7 @@
     }
     .message.user .avatar { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
     .bubble {
-      max-width: 70%;
+      max-width: 75%;
       padding: 12px 16px;
       border-radius: 18px;
       font-size: 14px;
@@ -145,15 +139,14 @@
       white-space: pre-wrap;
     }
     .bubble.ai {
-      background: rgba(168,85,247,0.2);
-      border: 1px solid rgba(168,85,247,0.3);
+      background: rgba(168,85,247,0.15);
+      border: 1px solid rgba(168,85,247,0.2);
       border-radius: 18px 18px 18px 4px;
     }
     .bubble.user {
       background: linear-gradient(135deg, #6366f1, #8b5cf6);
       border-radius: 18px 18px 4px 18px;
     }
-    
     .input-area {
       position: fixed;
       bottom: 0;
@@ -167,8 +160,8 @@
       gap: 12px;
       background: rgba(255,255,255,0.1);
       border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 12px;
+      border-radius: 24px;
+      padding: 8px 8px 8px 16px;
       max-width: 480px;
       margin: 0 auto;
     }
@@ -182,14 +175,128 @@
     }
     .input-box input::placeholder { color: #64748b; }
     .send-btn {
-      padding: 10px 16px;
+      padding: 10px 20px;
       background: linear-gradient(135deg, #a855f7, #6366f1);
       border: none;
-      border-radius: 10px;
+      border-radius: 20px;
       color: #fff;
       cursor: pointer;
+      font-size: 14px;
     }
     .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    /* 情绪 */
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 20px 16px;
+    }
+    .mood-item {
+      aspect-ratio: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .mood-item:hover { background: rgba(255,255,255,0.1); transform: scale(1.05); }
+    .mood-item.selected { background: rgba(168,85,247,0.2); border-color: #a855f7; }
+    .mood-emoji { font-size: 36px; margin-bottom: 8px; }
+    .mood-label { font-size: 12px; color: #9ca3af; }
+    
+    /* 冥想 */
+    .meditate-list { padding: 16px; }
+    .meditate-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .meditate-item:hover { background: rgba(255,255,255,0.1); }
+    .meditate-item.active { background: rgba(168,85,247,0.15); border-color: #a855f7; }
+    .meditate-emoji { font-size: 40px; }
+    .meditate-info { flex: 1; }
+    .meditate-title { font-size: 16px; margin-bottom: 4px; }
+    .meditate-desc { font-size: 12px; color: #64748b; }
+    .meditate-status {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .volume-control {
+      padding: 20px 16px;
+      background: rgba(255,255,255,0.05);
+      margin: 0 16px 16px;
+      border-radius: 16px;
+    }
+    .volume-control label { font-size: 12px; color: #64748b; display: block; margin-bottom: 8px; }
+    .volume-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.2);
+    }
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #a855f7;
+      cursor: pointer;
+    }
+    
+    /* 日记 */
+    .diary-input {
+      width: calc(100% - 32px);
+      margin: 16px;
+      padding: 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      color: #fff;
+      font-size: 14px;
+      min-height: 120px;
+      resize: none;
+      font-family: inherit;
+    }
+    .diary-btn {
+      width: calc(100% - 32px);
+      margin: 0 16px 16px;
+      padding: 14px;
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .diary-list { padding: 0 16px; }
+    .diary-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .diary-date { font-size: 12px; color: #64748b; margin-bottom: 8px; }
+    .diary-text { font-size: 14px; line-height: 1.6; }
     
     /* VIP弹窗 */
     .modal {
@@ -207,23 +314,25 @@
     }
     .modal-content {
       background: #1a1a2e;
-      padding: 24px;
-      border-radius: 20px;
-      max-width: 360px;
+      padding: 32px;
+      border-radius: 24px;
+      max-width: 320px;
       width: 100%;
-      border: 1px solid rgba(168,85,247,0.3);
+      text-align: center;
     }
-    .modal-title { text-align: center; font-size: 20px; margin-bottom: 16px; }
+    .modal-icon { font-size: 48px; margin-bottom: 16px; }
+    .modal-title { font-size: 20px; margin-bottom: 8px; }
+    .modal-desc { color: #9ca3af; font-size: 14px; margin-bottom: 24px; line-height: 1.6; }
     .modal-input {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       background: rgba(255,255,255,0.1);
       border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 8px;
+      border-radius: 12px;
       color: #fff;
       text-align: center;
       font-size: 16px;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       text-transform: uppercase;
     }
     .modal-btn {
@@ -236,195 +345,41 @@
       font-size: 16px;
       cursor: pointer;
     }
-    
-    /* 情绪页 */
-    .mood-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      padding: 16px;
-    }
-    .mood-item {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .mood-item:hover { background: rgba(255,255,255,0.1); }
-    .mood-item.selected {
-      background: rgba(168,85,247,0.2);
-      border-color: #a855f7;
-    }
-    .mood-emoji { font-size: 40px; margin-bottom: 8px; }
-    .mood-label { font-size: 12px; color: #9ca3af; }
-    
-    /* 冥想页 */
-    .scene-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      padding: 16px;
-    }
-    .scene-item {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 20px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .scene-item:hover { background: rgba(255,255,255,0.1); }
-    .scene-item.active {
-      background: rgba(168,85,247,0.2);
-      border-color: #a855f7;
-    }
-    .scene-emoji { font-size: 40px; margin-bottom: 8px; }
-    .scene-title { font-size: 14px; margin-bottom: 4px; }
-    .scene-desc { font-size: 11px; color: #64748b; }
-    
-    .player {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 24px;
-      margin: 16px;
-      text-align: center;
-    }
-    .player-emoji { font-size: 60px; margin-bottom: 12px; }
-    .play-btn {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #a855f7, #6366f1);
-      border: none;
-      color: #fff;
-      font-size: 24px;
-      cursor: pointer;
-      margin: 16px 0;
-    }
-    .volume-slider {
-      width: 100%;
-      margin-top: 16px;
-      -webkit-appearance: none;
-      height: 4px;
-      border-radius: 2px;
-      background: rgba(255,255,255,0.2);
-    }
-    .volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #a855f7;
-      cursor: pointer;
-    }
-    
-    /* 日记页 */
-    .diary-list { padding: 16px; }
-    .diary-item {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-    .diary-date { font-size: 12px; color: #64748b; margin-bottom: 8px; }
-    .diary-text { font-size: 14px; line-height: 1.6; }
-    .diary-input {
-      width: calc(100% - 32px);
-      margin: 16px;
-      padding: 16px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 12px;
-      color: #fff;
-      font-size: 14px;
-      min-height: 120px;
-      resize: none;
-    }
-    
-    /* 底部导航 */
-    .nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      justify-content: space-around;
-      padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
-      background: rgba(10,10,26,0.95);
-      border-top: 1px solid rgba(255,255,255,0.1);
-    }
-    .nav-item {
-      text-align: center;
-      padding: 8px 20px;
-      color: #64748b;
-      cursor: pointer;
-      font-size: 11px;
-    }
-    .nav-item.active { color: #a855f7; }
-    .nav-icon { font-size: 20px; margin-bottom: 2px; }
-    
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- 雨滴 -->
     <div id="rain"></div>
     
-    <!-- 首页 -->
+    <!-- 简洁首页 -->
     <div id="home" class="page active">
-      <div class="hero">
-        <div class="hero-emoji">🌧️</div>
-        <h1>为你好心语</h1>
-        <p class="hero-subtitle">AI情绪陪伴 · 温暖每个夜晚</p>
-      </div>
-      
-      <div class="stats">
-        <div class="stat-box">
-          <div class="stat-number" id="chatCount">10</div>
-          <div class="stat-label">剩余免费次数</div>
+      <div class="home-simple">
+        <div class="home-emoji">🌧️</div>
+        <h1 class="home-title">为你好心语</h1>
+        <p class="home-subtitle">深夜有人陪你听雨</p>
+        
+        <button class="home-btn" onclick="showPage('chat')">开始倾诉</button>
+        <button class="home-btn secondary" onclick="showPage('meditate')">冥想放松</button>
+        
+        <div class="home-stats">
+          <div class="home-stat">
+            <div class="home-stat-num" id="chatCount">10</div>
+            <div class="home-stat-label">剩余次数</div>
+          </div>
+          <div class="home-stat">
+            <div class="home-stat-num" id="vipStatus">免费</div>
+            <div class="home-stat-label">账户状态</div>
+          </div>
         </div>
-        <div class="stat-box">
-          <div class="stat-number" id="vipStatus">免费</div>
-          <div class="stat-label">账户状态</div>
-        </div>
       </div>
-
-      <div class="card" onclick="showPage('chat')">
-        <div class="card-title">💬 陪我说说话</div>
-        <div class="card-desc">深夜有人倾听，不打烊的陪伴</div>
-      </div>
-      
-      <div class="card" onclick="showPage('mood')">
-        <div class="card-title">🎭 情绪追踪</div>
-        <div class="card-desc">记录心情变化，看见自己</div>
-      </div>
-      
-      <div class="card" onclick="showPage('meditate')">
-        <div class="card-title">🧘 冥想放松</div>
-        <div class="card-desc">雨声海浪，让心静下来</div>
-      </div>
-      
-      <div class="card" onclick="showPage('diary')">
-        <div class="card-title">📔 情绪日记</div>
-        <div class="card-desc">写下那些说不出口的话</div>
-      </div>
-
-      <button class="btn" onclick="showVIPModal()">升级VIP 解锁无限</button>
     </div>
 
-    <!-- 聊天页 -->
+    <!-- 聊天 -->
     <div id="chat" class="page">
       <div class="header">
         <button class="back-btn" onclick="showPage('home')">←</button>
-        <span class="header-title">和心语聊天</span>
+        <span class="header-title">心语</span>
       </div>
       <div class="chat-box" id="chatBox">
         <div class="message">
@@ -434,154 +389,137 @@
       </div>
       <div class="input-area">
         <div class="input-box">
-          <input type="text" id="chatInput" placeholder="说点什么...我在听" onkeypress="if(event.key==='Enter')sendMessage()">
+          <input type="text" id="chatInput" placeholder="说点什么..." onkeypress="if(event.key==='Enter')sendMessage()">
           <button class="send-btn" onclick="sendMessage()">发送</button>
         </div>
       </div>
     </div>
 
-    <!-- 情绪页 -->
+    <!-- 情绪 -->
     <div id="mood" class="page">
       <div class="header">
         <button class="back-btn" onclick="showPage('home')">←</button>
-        <span class="header-title">情绪追踪</span>
+        <span class="header-title">此刻心情</span>
       </div>
-      <div style="padding: 20px; text-align: center;">
-        <h3 style="margin-bottom: 20px;">今晚，你的心情是？</h3>
+      <div style="padding: 20px 16px; text-align: center;">
+        <p style="color: #9ca3af; font-size: 14px;">选择一个表情，记录此刻</p>
       </div>
       <div class="mood-grid">
-        <div class="mood-item" onclick="saveMood('开心', 9, '😊')">
-          <div class="mood-emoji">😊</div>
-          <div class="mood-label">开心</div>
-        </div>
-        <div class="mood-item" onclick="saveMood('平静', 7, '😌')">
-          <div class="mood-emoji">😌</div>
-          <div class="mood-label">平静</div>
-        </div>
-        <div class="mood-item" onclick="saveMood('难过', 4, '😔')">
-          <div class="mood-emoji">😔</div>
-          <div class="mood-label">难过</div>
-        </div>
-        <div class="mood-item" onclick="saveMood('焦虑', 3, '😰')">
-          <div class="mood-emoji">😰</div>
-          <div class="mood-label">焦虑</div>
-        </div>
-        <div class="mood-item" onclick="saveMood('生气', 2, '😠')">
-          <div class="mood-emoji">😠</div>
-          <div class="mood-label">生气</div>
-        </div>
-        <div class="mood-item" onclick="saveMood('疲惫', 5, '😴')">
-          <div class="mood-emoji">😴</div>
-          <div class="mood-label">疲惫</div>
-        </div>
+        <div class="mood-item" onclick="saveMood(this, '开心', '😊')"><div class="mood-emoji">😊</div><div class="mood-label">开心</div></div>
+        <div class="mood-item" onclick="saveMood(this, '平静', '😌')"><div class="mood-emoji">😌</div><div class="mood-label">平静</div></div>
+        <div class="mood-item" onclick="saveMood(this, '难过', '😔')"><div class="mood-emoji">😔</div><div class="mood-label">难过</div></div>
+        <div class="mood-item" onclick="saveMood(this, '焦虑', '😰')"><div class="mood-emoji">😰</div><div class="mood-label">焦虑</div></div>
+        <div class="mood-item" onclick="saveMood(this, '生气', '😠')"><div class="mood-emoji">😠</div><div class="mood-label">生气</div></div>
+        <div class="mood-item" onclick="saveMood(this, '疲惫', '😴')"><div class="mood-emoji">😴</div><div class="mood-label">疲惫</div></div>
       </div>
-      <div id="moodHistory" style="padding: 16px;"></div>
+      <div id="moodMsg" style="text-align: center; color: #a855f7; font-size: 14px; margin-top: 20px;"></div>
     </div>
 
-    <!-- 冥想页 -->
+    <!-- 冥想 -->
     <div id="meditate" class="page">
       <div class="header">
         <button class="back-btn" onclick="showPage('home')">←</button>
-        <span class="header-title">冥想放松</span>
+        <span class="header-title">冥想</span>
       </div>
-      <div class="scene-grid">
-        <div class="scene-item" id="scene-rain" onclick="playSound('rain')">
-          <div class="scene-emoji">🌧️</div>
-          <div class="scene-title">雨夜窗边</div>
-          <div class="scene-desc">雨滴轻敲窗台的治愈声</div>
+      <div class="meditate-list">
+        <div class="meditate-item" id="scene-rain" onclick="playSound('rain')">
+          <div class="meditate-emoji">🌧️</div>
+          <div class="meditate-info">
+            <div class="meditate-title">雨夜窗边</div>
+            <div class="meditate-desc">密集雨滴，适合失眠</div>
+          </div>
+          <div class="meditate-status" id="btn-rain">▶</div>
         </div>
-        <div class="scene-item" id="scene-ocean" onclick="playSound('ocean')">
-          <div class="scene-emoji">🌊</div>
-          <div class="scene-title">海边日落</div>
-          <div class="scene-desc">海浪轻拍沙滩的宁静</div>
+        <div class="meditate-item" id="scene-ocean" onclick="playSound('ocean')">
+          <div class="meditate-emoji">🌊</div>
+          <div class="meditate-info">
+            <div class="meditate-title">海边日落</div>
+            <div class="meditate-desc">海浪起伏，深呼吸</div>
+          </div>
+          <div class="meditate-status" id="btn-ocean">▶</div>
         </div>
-        <div class="scene-item" id="scene-forest" onclick="playSound('forest')">
-          <div class="scene-emoji">🌲</div>
-          <div class="scene-title">森林漫步</div>
-          <div class="scene-desc">风声虫鸣的自然交响</div>
+        <div class="meditate-item" id="scene-forest" onclick="playSound('forest')">
+          <div class="meditate-emoji">🌲</div>
+          <div class="meditate-info">
+            <div class="meditate-title">森林漫步</div>
+            <div class="meditate-desc">虫鸣鸟叫，自然白噪</div>
+          </div>
+          <div class="meditate-status" id="btn-forest">▶</div>
         </div>
-        <div class="scene-item" id="scene-cafe" onclick="playSound('cafe')">
-          <div class="scene-emoji">☕</div>
-          <div class="scene-title">温暖咖啡馆</div>
-          <div class="scene-desc">轻柔背景氛围音</div>
+        <div class="meditate-item" id="scene-cafe" onclick="playSound('cafe')">
+          <div class="meditate-emoji">☕</div>
+          <div class="meditate-info">
+            <div class="meditate-title">温暖咖啡馆</div>
+            <div class="meditate-desc">人声低语，专注工作</div>
+          </div>
+          <div class="meditate-status" id="btn-cafe">▶</div>
         </div>
       </div>
-      <div id="player" class="player hidden">
-        <div class="player-emoji" id="playerEmoji">🌧️</div>
-        <div id="playerTitle">雨夜窗边</div>
-        <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
-        <input type="range" class="volume-slider" min="0" max="100" value="50" onchange="setVolume(this.value)">
+      <div class="volume-control">
+        <label>音量</label>
+        <input type="range" class="volume-slider" min="0" max="100" value="50" oninput="setVolume(this.value)">
       </div>
     </div>
 
-    <!-- 日记页 -->
+    <!-- 日记 -->
     <div id="diary" class="page">
       <div class="header">
         <button class="back-btn" onclick="showPage('home')">←</button>
-        <span class="header-title">情绪日记</span>
+        <span class="header-title">日记</span>
       </div>
-      <textarea class="diary-input" id="diaryInput" placeholder="今晚，我的心情是..."></textarea>
-      <button class="btn" onclick="saveDiary()">保存日记</button>
+      <textarea class="diary-input" id="diaryInput" placeholder="写下此刻的心情..."></textarea>
+      <button class="diary-btn" onclick="saveDiary()">保存</button>
       <div class="diary-list" id="diaryList"></div>
     </div>
 
     <!-- VIP弹窗 -->
     <div id="vipModal" class="modal hidden" onclick="hideVIPModal(event)">
       <div class="modal-content" onclick="event.stopPropagation()">
-        <div style="text-align: center; font-size: 48px; margin-bottom: 16px;">👑</div>
-        <h3 class="modal-title">解锁VIP特权</h3>
-        <div style="color: #9ca3af; font-size: 14px; margin-bottom: 20px; text-align: center;">
-          ✅ 无限聊天次数<br>
-          ✅ 所有冥想场景<br>
-          ✅ 情绪历史记录
-        </div>
-        <input type="text" class="modal-input" id="vipCode" placeholder="输入激活码" oninput="this.value=this.value.toUpperCase()">
-        <button class="modal-btn" onclick="activateVIP()">激活VIP</button>
-        <p style="color: #64748b; font-size: 12px; text-align: center; margin-top: 16px;">
-          激活码：XINYU666 / XINYU888 / DEV2026
-        </p>
+        <div class="modal-icon">👑</div>
+        <div class="modal-title">升级VIP</div>
+        <div class="modal-desc">解锁无限对话<br>所有冥想场景<br>永久使用权限</div>
+        <input type="text" class="modal-input" id="vipCode" placeholder="输入激活码">
+        <button class="modal-btn" onclick="activateVIP()">激活</button>
       </div>
     </div>
   </div>
 
   <script>
-    // ========== 数据存储 ==========
+    // 存储
     const storage = {
       get: (k) => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
       set: (k, v) => localStorage.setItem(k, JSON.stringify(v))
     };
 
-    // 初始化用户
+    // 初始化
     if (!storage.get('userId')) {
       storage.set('userId', 'user_' + Date.now());
       storage.set('chatCount', 10);
     }
 
-    // ========== 页面切换 ==========
+    // 页面切换
     function showPage(page) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById(page).classList.add('active');
       if (page === 'home') updateHome();
-      if (page === 'mood') loadMoodHistory();
       if (page === 'diary') loadDiary();
     }
 
-    // ========== 首页 ==========
+    // 首页状态
     function updateHome() {
       const vip = checkVIP();
-      const count = vip ? -1 : (storage.get('chatCount') || 10);
-      document.getElementById('chatCount').textContent = count === -1 ? '∞' : count;
+      const count = vip ? '∞' : (storage.get('chatCount') || 10);
+      document.getElementById('chatCount').textContent = count;
       document.getElementById('vipStatus').textContent = vip ? 'VIP' : '免费';
       document.getElementById('vipStatus').style.color = vip ? '#fbbf24' : '#fff';
     }
 
     function checkVIP() {
       const exp = storage.get('vip_expires');
-      if (!exp) return false;
-      return new Date(exp) > new Date();
+      return exp && new Date(exp) > new Date();
     }
 
-    // ========== AI回复 ==========
+    // AI回复
     const replies = {
       '想死': '我知道你现在很难，真的很难。但我在这里。',
       '自杀': '听到你这样说，我很难过。你不是一个人。',
@@ -618,17 +556,14 @@
       '焦虑': '焦虑的感觉像被困住。我陪你慢慢呼吸。',
       '抑郁': '那种沉重的感觉，像是被什么压着。我在这里，不走。'
     };
-
     const defaults = ['我在。', '嗯，我在听。', '我在这里。', '说吧，我听着呢。', '然后呢？', '我懂。', '嗯...'];
 
     function getReply(msg) {
-      for (let k in replies) {
-        if (msg.includes(k)) return replies[k];
-      }
+      for (let k in replies) if (msg.includes(k)) return replies[k];
       return defaults[Math.floor(Math.random() * defaults.length)];
     }
 
-    // ========== 聊天 ==========
+    // 聊天
     function sendMessage() {
       const input = document.getElementById('chatInput');
       const msg = input.value.trim();
@@ -638,64 +573,38 @@
       let count = storage.get('chatCount') || 10;
 
       if (!vip && count <= 0) {
-        showVIPModal();
+        document.getElementById('vipModal').classList.remove('hidden');
         return;
       }
 
-      // 添加用户消息
       const box = document.getElementById('chatBox');
       box.innerHTML += `<div class="message user"><div class="avatar">我</div><div class="bubble user">${msg}</div></div>`;
       input.value = '';
       box.scrollTop = box.scrollHeight;
 
-      // 减少次数
-      if (!vip) {
-        storage.set('chatCount', count - 1);
-        updateHome();
-      }
+      if (!vip) storage.set('chatCount', count - 1);
+      updateHome();
 
-      // AI回复
       setTimeout(() => {
         const reply = getReply(msg);
         box.innerHTML += `<div class="message"><div class="avatar">🌸</div><div class="bubble ai">${reply}</div></div>`;
         box.scrollTop = box.scrollHeight;
-      }, 500);
+      }, 400);
     }
 
-    // ========== 情绪 ==========
-    function saveMood(label, score, emoji) {
+    // 情绪
+    function saveMood(el, label, emoji) {
+      document.querySelectorAll('.mood-item').forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('moodMsg').textContent = `已记录：${emoji} ${label}`;
       const history = storage.get('moodHistory') || [];
-      history.unshift({ label, score, emoji, date: new Date().toLocaleString('zh-CN'), id: Date.now() });
+      history.unshift({ label, emoji, date: new Date().toLocaleString('zh-CN') });
       storage.set('moodHistory', history.slice(0, 30));
-      
-      document.querySelectorAll('.mood-item').forEach(el => el.classList.remove('selected'));
-      event.currentTarget.classList.add('selected');
-      
-      loadMoodHistory();
     }
 
-    function loadMoodHistory() {
-      const history = storage.get('moodHistory') || [];
-      const div = document.getElementById('moodHistory');
-      if (history.length === 0) {
-        div.innerHTML = '<p style="color:#64748b;text-align:center;">还没有记录</p>';
-        return;
-      }
-      div.innerHTML = '<h4 style="margin-bottom:12px;">最近记录</h4>' + 
-        history.slice(0, 7).map(h => `
-          <div style="display:flex;justify-content:space-between;padding:12px;background:rgba(255,255,255,0.05);border-radius:8px;margin:8px 0;">
-            <span>${h.emoji} ${h.label}</span>
-            <span style="color:#64748b;font-size:12px;">${h.date.split(' ')[0]}</span>
-          </div>
-        `).join('');
-    }
-
-    // ========== 冥想音频 ==========
-    let audioCtx = null;
-    let currentSource = null;
-    let gainNode = null;
-    let currentScene = null;
-    let isPlaying = false;
+    // ========== 冥想音频（四种独特风格）==========
+    let audioCtx = null, gainNode = null, currentSource = null, currentScene = null, isPlaying = false;
+    let lfoNode = null, lfoGain = null;
 
     function initAudio() {
       if (!audioCtx) {
@@ -704,132 +613,264 @@
         gainNode.connect(audioCtx.destination);
         gainNode.gain.value = 0.5;
       }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
-    function createNoise(type) {
+    // 雨声：密集粉红噪音 + 低通滤波
+    function createRain() {
       const bufferSize = 2 * audioCtx.sampleRate;
       const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
       const output = buffer.getChannelData(0);
-
-      if (type === 'rain') {
-        let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
-        for (let i=0; i<bufferSize; i++) {
-          const white = Math.random()*2-1;
-          b0=0.99886*b0+white*0.0555179;
-          b1=0.99332*b1+white*0.0750759;
-          b2=0.96900*b2+white*0.1538520;
-          b3=0.86650*b3+white*0.3104856;
-          b4=0.55000*b4+white*0.5329522;
-          b5=-0.7616*b5-white*0.0168980;
-          output[i]=(b0+b1+b2+b3+b4+b5+b6+white*0.5362)*0.11;
-          b6=white*0.115926;
-        }
-      } else if (type === 'ocean') {
-        let last=0;
-        for (let i=0; i<bufferSize; i++) {
-          const white = Math.random()*2-1;
-          output[i]=(last+0.02*white)/1.02;
-          last=output[i];
-          output[i]*=3.5;
-        }
-      } else {
-        for (let i=0; i<bufferSize; i++) {
-          output[i]=(Math.random()*2-1)*0.1;
-        }
+      let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+      for (let i=0; i<bufferSize; i++) {
+        const white = Math.random()*2-1;
+        b0=0.99886*b0+white*0.0555179;
+        b1=0.99332*b1+white*0.0750759;
+        b2=0.96900*b2+white*0.1538520;
+        b3=0.86650*b3+white*0.3104856;
+        b4=0.55000*b4+white*0.5329522;
+        b5=-0.7616*b5-white*0.0168980;
+        output[i]=(b0+b1+b2+b3+b4+b5+b6+white*0.5362)*0.15;
+        b6=white*0.115926;
       }
-      return buffer;
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = buffer;
+      noise.loop = true;
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 600;
+      noise.connect(filter);
+      filter.connect(gainNode);
+      return noise;
+    }
+
+    // 海浪：布朗噪音 + 低频振荡器模拟潮汐
+    function createOcean() {
+      const bufferSize = 2 * audioCtx.sampleRate;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = buffer.getChannelData(0);
+      let last=0;
+      for (let i=0; i<bufferSize; i++) {
+        const white = Math.random()*2-1;
+        output[i]=(last+0.02*white)/1.02;
+        last=output[i];
+        output[i]*=4;
+      }
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = buffer;
+      noise.loop = true;
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 300;
+      
+      // 潮汐效果
+      lfoNode = audioCtx.createOscillator();
+      lfoNode.type = 'sine';
+      lfoNode.frequency.value = 0.08;
+      lfoGain = audioCtx.createGain();
+      lfoGain.gain.value = 0.3;
+      lfoNode.connect(lfoGain);
+      lfoGain.connect(gainNode.gain);
+      lfoNode.start();
+      
+      noise.connect(filter);
+      filter.connect(gainNode);
+      return noise;
+    }
+
+    // 森林：风声 + 虫鸣 + 偶尔鸟叫
+    function createForest() {
+      const sources = [];
+      
+      // 风声（带通滤波白噪）
+      const windBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate*2, audioCtx.sampleRate);
+      const windData = windBuffer.getChannelData(0);
+      for (let i=0; i<windData.length; i++) windData[i]=(Math.random()*2-1)*0.3;
+      const wind = audioCtx.createBufferSource();
+      wind.buffer = windBuffer;
+      wind.loop = true;
+      const windFilter = audioCtx.createBiquadFilter();
+      windFilter.type = 'bandpass';
+      windFilter.frequency.value = 400;
+      windFilter.Q.value = 0.5;
+      const windGain = audioCtx.createGain();
+      windGain.gain.value = 0.4;
+      wind.connect(windFilter);
+      windFilter.connect(windGain);
+      windGain.connect(gainNode);
+      sources.push(wind);
+      
+      // 虫鸣1 - 高频脉冲
+      const cricket1 = audioCtx.createOscillator();
+      cricket1.type = 'square';
+      cricket1.frequency.value = 4200;
+      const c1Gain = audioCtx.createGain();
+      c1Gain.gain.value = 0.015;
+      cricket1.connect(c1Gain);
+      c1Gain.connect(gainNode);
+      cricket1.start();
+      sources.push(cricket1);
+      
+      // 虫鸣2 - 锯齿波
+      const cricket2 = audioCtx.createOscillator();
+      cricket2.type = 'sawtooth';
+      cricket2.frequency.value = 3800;
+      const c2Gain = audioCtx.createGain();
+      c2Gain.gain.value = 0.012;
+      cricket2.connect(c2Gain);
+      c2Gain.connect(gainNode);
+      cricket2.start();
+      sources.push(cricket2);
+      
+      // 鸟叫 - 变频正弦波
+      const bird = audioCtx.createOscillator();
+      bird.type = 'sine';
+      bird.frequency.setValueAtTime(2000, audioCtx.currentTime);
+      bird.frequency.exponentialRampToValueAtTime(3000, audioCtx.currentTime+0.1);
+      const birdGain = audioCtx.createGain();
+      birdGain.gain.setValueAtTime(0, audioCtx.currentTime);
+      birdGain.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime+0.05);
+      birdGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime+0.3);
+      bird.connect(birdGain);
+      birdGain.connect(gainNode);
+      bird.start();
+      
+      return sources;
+    }
+
+    // 咖啡馆：人声嗡嗡 + 杯碟声 + 咖啡机蒸汽
+    function createCafe() {
+      const sources = [];
+      
+      // 人声背景（低通粉红噪音）
+      const voiceBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate*2, audioCtx.sampleRate);
+      const voiceData = voiceBuffer.getChannelData(0);
+      let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+      for (let i=0; i<voiceData.length; i++) {
+        const white = Math.random()*2-1;
+        b0=0.99886*b0+white*0.0555179;
+        b1=0.99332*b1+white*0.0750759;
+        b2=0.96900*b2+white*0.1538520;
+        b3=0.86650*b3+white*0.3104856;
+        b4=0.55000*b4+white*0.5329522;
+        b5=-0.7616*b5-white*0.0168980;
+        voiceData[i]=(b0+b1+b2+b3+b4+b5+b6+white*0.5362)*0.08;
+        b6=white*0.115926;
+      }
+      const voices = audioCtx.createBufferSource();
+      voices.buffer = voiceBuffer;
+      voices.loop = true;
+      const voiceFilter = audioCtx.createBiquadFilter();
+      voiceFilter.type = 'lowpass';
+      voiceFilter.frequency.value = 800;
+      voices.connect(voiceFilter);
+      voiceFilter.connect(gainNode);
+      sources.push(voices);
+      
+      // 杯碟轻响 - 随机高频点击
+      const click = audioCtx.createOscillator();
+      click.type = 'triangle';
+      click.frequency.value = 6000;
+      const clickGain = audioCtx.createGain();
+      clickGain.gain.value = 0;
+      click.connect(clickGain);
+      clickGain.connect(gainNode);
+      click.start();
+      
+      // 随机触发点击
+      const clickLFO = audioCtx.createOscillator();
+      clickLFO.type = 'sawtooth';
+      clickLFO.frequency.value = 0.2;
+      const clickLFOGain = audioCtx.createGain();
+      clickLFOGain.gain.value = 0.008;
+      clickLFO.connect(clickLFOGain);
+      clickLFOGain.connect(clickGain.gain);
+      clickLFO.start();
+      sources.push(click, clickLFO);
+      
+      // 咖啡机蒸汽 - 高通白噪
+      const steamBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate*2, audioCtx.sampleRate);
+      const steamData = steamBuffer.getChannelData(0);
+      for (let i=0; i<steamData.length; i++) steamData[i]=(Math.random()*2-1)*0.2;
+      const steam = audioCtx.createBufferSource();
+      steam.buffer = steamBuffer;
+      steam.loop = true;
+      const steamFilter = audioCtx.createBiquadFilter();
+      steamFilter.type = 'highpass';
+      steamFilter.frequency.value = 3000;
+      const steamGain = audioCtx.createGain();
+      steamGain.gain.value = 0.06;
+      steam.connect(steamFilter);
+      steamFilter.connect(steamGain);
+      steamGain.connect(gainNode);
+      sources.push(steam);
+      
+      return sources;
     }
 
     function playSound(type) {
       initAudio();
       
-      // 如果点击的是当前播放的场景，则停止
       if (currentScene === type && isPlaying) {
         stopSound();
         return;
       }
-
-      // 停止之前的
+      
       stopSound();
-
       currentScene = type;
-      const scenes = {
-        rain: { emoji: '🌧️', title: '雨夜窗边' },
-        ocean: { emoji: '🌊', title: '海边日落' },
-        forest: { emoji: '🌲', title: '森林漫步' },
-        cafe: { emoji: '☕', title: '温暖咖啡馆' }
-      };
-
-      // 更新UI
-      document.querySelectorAll('.scene-item').forEach(el => el.classList.remove('active'));
+      
+      document.querySelectorAll('.meditate-item').forEach(el => el.classList.remove('active'));
       document.getElementById('scene-' + type).classList.add('active');
-      document.getElementById('player').classList.remove('hidden');
-      document.getElementById('playerEmoji').textContent = scenes[type].emoji;
-      document.getElementById('playerTitle').textContent = scenes[type].title;
-      document.getElementById('playBtn').textContent = '⏸';
-
-      // 创建音频
-      const buffer = createNoise(type);
-      currentSource = audioCtx.createBufferSource();
-      currentSource.buffer = buffer;
-      currentSource.loop = true;
-
-      // 滤波器
-      const filter = audioCtx.createBiquadFilter();
+      
+      ['rain','ocean','forest','cafe'].forEach(t => {
+        document.getElementById('btn-' + t).textContent = t === type ? '⏸' : '▶';
+      });
+      
       if (type === 'rain') {
-        filter.type = 'lowpass';
-        filter.frequency.value = 800;
+        currentSource = createRain();
+        currentSource.start();
       } else if (type === 'ocean') {
-        filter.type = 'lowpass';
-        filter.frequency.value = 400;
+        currentSource = createOcean();
+        currentSource.start();
       } else if (type === 'forest') {
-        filter.type = 'bandpass';
-        filter.frequency.value = 1000;
-      } else {
-        filter.type = 'lowpass';
-        filter.frequency.value = 2000;
+        currentSource = createForest();
+        currentSource.forEach(s => s.start ? s.start() : null);
+      } else if (type === 'cafe') {
+        currentSource = createCafe();
+        currentSource.forEach(s => s.start ? s.start() : null);
       }
-
-      currentSource.connect(filter);
-      filter.connect(gainNode);
-      currentSource.start();
+      
       isPlaying = true;
     }
 
     function stopSound() {
       if (currentSource) {
-        try { currentSource.stop(); } catch(e) {}
+        if (Array.isArray(currentSource)) {
+          currentSource.forEach(s => { try { s.stop(); } catch(e){} });
+        } else {
+          try { currentSource.stop(); } catch(e){}
+        }
         currentSource = null;
       }
+      if (lfoNode) { try { lfoNode.stop(); } catch(e){} lfoNode = null; }
+      if (lfoGain) { lfoGain = null; }
       isPlaying = false;
-      document.getElementById('playBtn').textContent = '▶';
-    }
-
-    function togglePlay() {
-      if (!currentScene) return;
-      if (isPlaying) {
-        stopSound();
-      } else {
-        playSound(currentScene);
-      }
+      currentScene = null;
+      document.querySelectorAll('.meditate-item').forEach(el => el.classList.remove('active'));
+      ['rain','ocean','forest','cafe'].forEach(t => document.getElementById('btn-' + t).textContent = '▶');
     }
 
     function setVolume(v) {
-      if (gainNode) {
-        gainNode.gain.value = v / 100;
-      }
+      if (gainNode) gainNode.gain.value = v / 100;
     }
 
-    // ========== 日记 ==========
+    // 日记
     function saveDiary() {
       const text = document.getElementById('diaryInput').value.trim();
       if (!text) return;
       const diaries = storage.get('diaries') || [];
-      diaries.unshift({ text, date: new Date().toLocaleString('zh-CN'), id: Date.now() });
-      storage.set('diaries', diaries.slice(0, 100));
+      diaries.unshift({ text, date: new Date().toLocaleString('zh-CN', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}) });
+      storage.set('diaries', diaries.slice(0, 50));
       document.getElementById('diaryInput').value = '';
       loadDiary();
     }
@@ -838,7 +879,7 @@
       const diaries = storage.get('diaries') || [];
       const div = document.getElementById('diaryList');
       if (diaries.length === 0) {
-        div.innerHTML = '<p style="color:#64748b;text-align:center;padding:40px;">还没有日记</p>';
+        div.innerHTML = '<div style="text-align:center;color:#64748b;padding:40px;">还没有日记</div>';
         return;
       }
       div.innerHTML = diaries.slice(0, 10).map(d => `
@@ -849,27 +890,19 @@
       `).join('');
     }
 
-    // ========== VIP ==========
-    function showVIPModal() {
-      document.getElementById('vipModal').classList.remove('hidden');
-    }
-
+    // VIP
     function hideVIPModal(e) {
-      if (e.target.id === 'vipModal') {
-        document.getElementById('vipModal').classList.add('hidden');
-      }
+      if (e.target.id === 'vipModal') document.getElementById('vipModal').classList.add('hidden');
     }
 
     function activateVIP() {
       const code = document.getElementById('vipCode').value.trim().toUpperCase();
-      const validCodes = ['XINYU666', 'XINYU888', 'DEV2026', 'FREEVIP', 'FOREVER', 'OWNER2026'];
+      const validCodes = ['XINYU666', 'XINYU888', 'DEV2026', 'FREEVIP', 'FOREVER', 'OWNER2026', 'HEART2026'];
       
       if (validCodes.includes(code)) {
         const isPermanent = ['FOREVER', 'OWNER2026'].includes(code);
-        const expires = isPermanent ? '2126-12-31' : new Date(Date.now() + 365*24*60*60*1000).toISOString();
-        storage.set('vip_expires', expires);
-        storage.set('vip_code', code);
-        alert(isPermanent ? '🎉 永久VIP已激活！' : '🎉 VIP已激活（1年有效期）');
+        storage.set('vip_expires', isPermanent ? '2126-12-31' : new Date(Date.now()+365*86400000).toISOString());
+        alert(isPermanent ? '永久VIP已激活！' : 'VIP已激活（1年）');
         document.getElementById('vipModal').classList.add('hidden');
         updateHome();
       } else {
@@ -877,10 +910,10 @@
       }
     }
 
-    // ========== 雨滴效果 ==========
+    // 雨滴
     function createRain() {
       const rain = document.getElementById('rain');
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 12; i++) {
         const drop = document.createElement('div');
         drop.className = 'raindrop';
         drop.style.left = Math.random() * 100 + '%';
@@ -890,7 +923,6 @@
       }
     }
 
-    // 初始化
     createRain();
     updateHome();
   </script>
