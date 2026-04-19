@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深夜树洞 · 为你好心语</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:linear-gradient(180deg,#0a0a1a,#1a1a3e,#0d0d2a);min-height:100vh;color:#e0d8f0}
+.rain{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.rain-drop{position:absolute;width:2px;background:linear-gradient(to bottom,transparent,rgba(180,140,255,0.4));animation:fall linear infinite}
+@keyframes fall{to{transform:translateY(100vh)}}
+.container{max-width:600px;margin:0 auto;padding:20px;position:relative;z-index:1}
+.hero{text-align:center;padding:60px 0 30px}
+.hero-emoji{font-size:72px;margin-bottom:16px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{font-size:28px;font-weight:700;margin-bottom:8px;background:linear-gradient(135deg,#c9a0f0,#9b6ee0);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:16px;color:#a090c0;line-height:1.6;margin-bottom:20px}
+.tagline{background:rgba(155,110,224,0.15);border:1px solid rgba(155,110,224,0.3);border-radius:20px;padding:8px 20px;display:inline-block;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:30px 0}
+.stat{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;text-align:center}
+.stat .n{font-size:28px;font-weight:700;color:#c9a0f0}
+.stat .l{font-size:12px;color:#6b5b7a;margin-top:4px}
+.features{margin:20px 0}
+.feat{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;margin-bottom:12px;display:flex;align-items:center;gap:16px}
+.feat-icon{font-size:32px;flex-shrink:0}
+.feat h3{font-size:15px;margin-bottom:4px}
+.feat p{font-size:13px;color:#6b5b7a}
+.testimonials{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;margin:20px 0}
+.testi{font-size:14px;color:#a090c0;line-height:1.7;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.testi:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.testi strong{color:#c9a0f0}
+.cta{text-align:center;padding:30px 0}
+.btn{display:inline-block;background:linear-gradient(135deg,#9b6ee0,#7c3aed);color:white;text-decoration:none;font-size:18px;font-weight:600;padding:18px 48px;border-radius:50px;box-shadow:0 8px 32px rgba(155,110,224,0.4);transition:transform 0.2s,box-shadow 0.2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(155,110,224,0.5)}
+.price{text-align:center;margin:20px 0}
+.price-note{font-size:13px;color:#6b5b7a;margin-top:8px}
+.footer{text-align:center;padding:30px 0;color:#4a3a5a;font-size:12px}
+</style>
+</head>
+<body>
+<div class="rain" id="rain"></div>
+<div class="container">
+<div class="hero">
+  <div class="hero-emoji">🌧️</div>
+  <h1>为你好心语</h1>
+  <p>深夜睡不着？来这里<br>有人真的在听</p>
+  <div class="tagline">💜 免费10次/天 · 24小时在线</div>
+</div>
+<div class="stats">
+  <div class="stat"><div class="n">10</div><div class="l">免费对话/天</div></div>
+  <div class="stat"><div class="n">24h</div><div class="l">全天陪伴</div></div>
+  <div class="stat"><div class="n">0</div><div class="l">评判/说教</div></div>
+</div>
+<div class="features">
+  <div class="feat"><div class="feat-icon">🌧️</div><div><h3>雨夜治愈氛围</h3><p>打开就是雨夜，仿佛有人陪着你</p></div></div>
+  <div class="feat"><div class="feat-icon">💜</div><div><h3>高级共情陪伴</h3><p>不说教、不评判，只是安静陪着你</p></div></div>
+  <div class="feat"><div class="feat-icon">🔐</div><div><h3>完全私密</h3><p>不保存对话，不追踪数据，只属于你的树洞</p></div></div>
+  <div class="feat"><div class="feat-icon">💰</div><div><h3>解锁VIP无限陪伴</h3><p>¥29/月，无限次对话，永久陪伴</p></div></div>
+</div>
+<div class="testimonials">
+  <div class="testi">"我好累" → <strong>「嗯…辛苦了。不是那种客套的辛苦了，是真的觉得你撑了很久吧。」</strong></div>
+  <div class="testi">"被朋友背叛了" → <strong>「被最信任的人伤害，那种感觉不是生气，是心空了一块。」</strong></div>
+  <div class="testi">"有时候觉得活着没意思" → <strong>「有时候不是真的想死，只是太累了，想让一切停一下。」</strong></div>
+</div>
+<div class="cta">
+  <a href="/#chat" class="btn">🌧️ 打开心语</a>
+  <div class="price">
+    <div style="font-size:24px;font-weight:700;color:#c9a0f0">¥29/月</div>
+    <div class="price-note">每天不到1块钱，换无限次深夜陪伴</div>
+  </div>
+</div>
+<div class="footer">
+  <p>🌧️ 为你好心语 · 温暖治愈你的每一个夜晚</p>
+</div>
+</div>
+<script>
+var drops = 30;
+for (var i=0;i<drops;i++){
+  var d = document.createElement('div');
+  d.className = 'rain-drop';
+  d.style.left = Math.random()*100+'%';
+  d.style.animationDuration = (2+Math.random()*3)+'s';
+  d.style.animationDelay = Math.random()*5+'s';
+  d.style.height = (10+Math.random()*20)+'px';
+  d.style.opacity = 0.1+Math.random()*0.3;
+  document.getElementById('rain').appendChild(d);
+}
+</script>
+</body>
+</html>

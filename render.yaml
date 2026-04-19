@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: healing-ai-companion
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: node server.js
+    envVars:
+      - key: AI_KEY
+        sync: false
+      - key: NODE_ENV
+        value: production

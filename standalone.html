@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>为你好心语 - AI情绪陪伴</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: #fff;
+    }
+    .container { max-width: 480px; margin: 0 auto; padding: 20px; }
+    .header { text-align: center; padding: 40px 20px; }
+    .emoji { font-size: 80px; margin-bottom: 20px; }
+    h1 { font-size: 28px; font-weight: 300; margin-bottom: 10px; }
+    .subtitle { color: #a855f7; font-size: 14px; }
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 15px 0;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .card:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+    .card-title { font-size: 16px; margin-bottom: 5px; }
+    .card-desc { font-size: 12px; color: #94a3b8; }
+    .btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px 0;
+    }
+    .chat-box {
+      height: 400px;
+      overflow-y: auto;
+      padding: 15px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 12px;
+      margin: 15px 0;
+    }
+    .message {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      margin: 10px 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .message.ai {
+      background: rgba(168,85,247,0.2);
+      border: 1px solid rgba(168,85,247,0.3);
+      margin-right: auto;
+    }
+    .message.user {
+      background: rgba(99,102,241,0.3);
+      margin-left: auto;
+      text-align: right;
+    }
+    .input-box {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .input-box input {
+      flex: 1;
+      padding: 15px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 14px;
+    }
+    .input-box button {
+      padding: 15px 25px;
+      background: #a855f7;
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      cursor: pointer;
+    }
+    .hidden { display: none; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10,10,26,0.95);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .nav-item {
+      text-align: center;
+      padding: 5px 15px;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .nav-item.active { color: #a855f7; }
+    .nav-icon { font-size: 20px; margin-bottom: 3px; }
+    .vip-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #000;
+      font-size: 11px;
+      border-radius: 10px;
+      margin-left: 10px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .stat-box {
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .stat-number { font-size: 32px; font-weight: 300; color: #a855f7; }
+    .stat-label { font-size: 12px; color: #64748b; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 首页 -->
+    <div id="home" class="page active">
+      <div class="header">
+        <div class="emoji">🌧️</div>
+        <h1>为你好心语</h1>
+        <p class="subtitle">AI情绪陪伴 · 温暖每个夜晚</p>
+      </div>
+      
+      <div class="stats">
+        <div class="stat-box">
+          <div class="stat-number" id="chatCount">10</div>
+          <div class="stat-label">剩余免费次数</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="vipStatus">免费</div>
+          <div class="stat-label">账户状态</div>
+        </div>
+      </div>
+
+      <div class="card" onclick="showPage('chat')">
+        <div class="card-title">💬 陪我说说话</div>
+        <div class="card-desc">深夜有人倾听，不打烊的陪伴</div>
+      </div>
+      
+      <div class="card" onclick="showPage('mood')">
+        <div class="card-title">🎭 情绪追踪</div>
+        <div class="card-desc">记录心情变化，看见自己</div>
+      </div>
+      
+      <div class="card" onclick="showPage('meditate')">
+        <div class="card-title">🧘 冥想放松</div>
+        <div class="card-desc">雨声海浪，让心静下来</div>
+      </div>
+      
+      <div class="card" onclick="showPage('diary')">
+        <div class="card-title">📔 情绪日记</div>
+        <div class="card-desc">写下那些说不出口的话</div>
+      </div>
+
+      <button class="btn" onclick="showPage('vip')">升级VIP 解锁无限</button>
+    </div>
+
+    <!-- 聊天页 -->
+    <div id="chat" class="page">
+      <div style="padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <button onclick="showPage('home')" style="background:none;border:none;color:#fff;font-size:16px;">← 返回</button>
+        <span style="margin-left: 15px;">和心语聊天</span>
+      </div>
+      <div class="chat-box" id="chatBox">
+        <div class="message ai">嗨，我是心语 🌙<br><br>今晚想聊点什么？</div>
+      </div>
+      <div class="input-box">
+        <input type="text" id="chatInput" placeholder="说点什么..." onkeypress="if(event.key==='Enter')sendMessage()">
+        <button onclick="sendMessage()">发送</button>
+      </div>
+    </div>
+
+    <!-- 情绪页 -->
+    <div id="mood" class="page">
+      <div style="padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <button onclick="showPage('home')" style="background:none;border:none;color:#fff;font-size:16px;">← 返回</button>
+        <span style="margin-left: 15px;">情绪追踪</span>
+      </div>
+      <div style="padding: 20px;">
+        <h3 style="text-align:center;margin-bottom:20px;">今晚，你的心情是？</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+          <div class="card" onclick="saveMood('开心', 9, '😊')" style="text-align:center;">
+            <div style="font-size:40px;">😊</div>
+            <div style="font-size:12px;margin-top:5px;">开心</div>
+          </div>
+          <div class="card" onclick="saveMood('平静', 7, '😌')" style="text-align:center;">
+            <div style="font-size:40px;">😌</div>
+            <div style="font-size:12px;margin-top:5px;">平静</div>
+          </div>
+          <div class="card" onclick="saveMood('难过', 4, '😔')" style="text-align:center;">
+            <div style="font-size:40px;">😔</div>
+            <div style="font-size:12px;margin-top:5px;">难过</div>
+          </div>
+          <div class="card" onclick="saveMood('焦虑', 3, '😰')" style="text-align:center;">
+            <div style="font-size:40px;">😰</div>
+            <div style="font-size:12px;margin-top:5px;">焦虑</div>
+          </div>
+          <div class="card" onclick="saveMood('生气', 2, '😠')" style="text-align:center;">
+            <div style="font-size:40px;">😠</div>
+            <div style="font-size:12px;margin-top:5px;">生气</div>
+          </div>
+          <div class="card" onclick="saveMood('疲惫', 5, '😴')" style="text-align:center;">
+            <div style="font-size:40px;">😴</div>
+            <div style="font-size:12px;margin-top:5px;">疲惫</div>
+          </div>
+        </div>
+        <div id="moodHistory" style="margin-top:20px;"></div>
+      </div>
+    </div>
+
+    <!-- 冥想页 -->
+    <div id="meditate" class="page">
+      <div style="padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <button onclick="showPage('home')" style="background:none;border:none;color:#fff;font-size:16px;">← 返回</button>
+        <span style="margin-left: 15px;">冥想放松</span>
+      </div>
+      <div style="padding: 20px;">
+        <div class="card" onclick="playSound('rain')">
+          <div class="card-title">🌧️ 雨夜窗边</div>
+          <div class="card-desc">雨滴轻敲窗台的治愈声 <span id="rainStatus"></span></div>
+        </div>
+        <div class="card" onclick="playSound('ocean')">
+          <div class="card-title">🌊 海边日落</div>
+          <div class="card-desc">海浪轻拍沙滩的宁静 <span id="oceanStatus"></span></div>
+        </div>
+        <div class="card" onclick="playSound('forest')">
+          <div class="card-title">🌲 森林漫步</div>
+          <div class="card-desc">风声虫鸣的自然交响 <span id="forestStatus"></span></div>
+        </div>
+        <div class="card" onclick="playSound('cafe')">
+          <div class="card-title">☕ 温暖咖啡馆</div>
+          <div class="card-desc">轻柔背景氛围音 <span id="cafeStatus"></span></div>
+        </div>
+        <input type="range" min="0" max="100" value="50" onchange="setVolume(this.value)" style="width:100%;margin-top:20px;">
+        <p style="text-align:center;color:#64748b;font-size:12px;margin-top:10px;">音量控制</p>
+      </div>
+    </div>
+
+    <!-- 日记页 -->
+    <div id="diary" class="page">
+      <div style="padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <button onclick="showPage('home')" style="background:none;border:none;color:#fff;font-size:16px;">← 返回</button>
+        <span style="margin-left: 15px;">情绪日记</span>
+      </div>
+      <div style="padding: 20px;">
+        <textarea id="diaryInput" rows="6" style="width:100%;padding:15px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:12px;color:#fff;resize:none;" placeholder="今晚，我的心情是..."></textarea>
+        <button class="btn" onclick="saveDiary()">保存日记</button>
+        <div id="diaryList" style="margin-top:20px;"></div>
+      </div>
+    </div>
+
+    <!-- VIP页 -->
+    <div id="vip" class="page">
+      <div style="padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <button onclick="showPage('home')" style="background:none;border:none;color:#fff;font-size:16px;">← 返回</button>
+        <span style="margin-left: 15px;">升级VIP</span>
+      </div>
+      <div style="padding: 20px; text-align: center;">
+        <div style="font-size: 60px; margin: 20px 0;">👑</div>
+        <h2>解锁VIP特权</h2>
+        <div style="text-align: left; margin: 30px 0;">
+          <div style="padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.05); border-radius: 12px;">✅ 无限聊天次数</div>
+          <div style="padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.05); border-radius: 12px;">✅ 所有冥想场景</div>
+          <div style="padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.05); border-radius: 12px;">✅ 情绪历史记录</div>
+          <div style="padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.05); border-radius: 12px;">✅ 优先AI回复</div>
+        </div>
+        <div style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); padding: 20px; border-radius: 12px; margin: 20px 0;">
+          <p style="color: #a855f7; margin-bottom: 10px;">输入激活码解锁</p>
+          <input type="text" id="vipCode" placeholder="输入激活码" style="width:100%;padding:12px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;text-align:center;text-transform:uppercase;">
+          <button class="btn" onclick="activateVIP()" style="margin-top:15px;">激活VIP</button>
+        </div>
+        <p style="color: #64748b; font-size: 12px; margin-top: 20px;">激活码：XINYU666 / XINYU888 / DEV2026</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 数据存储
+    const storage = {
+      get: (k) => JSON.parse(localStorage.getItem(k) || 'null'),
+      set: (k, v) => localStorage.setItem(k, JSON.stringify(v))
+    };
+
+    // 初始化
+    if (!storage.get('userId')) {
+      storage.set('userId', 'user_' + Date.now());
+      storage.set('chatCount', 10);
+    }
+
+    // 页面切换
+    function showPage(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(page).classList.add('active');
+      if (page === 'home') updateHome();
+      if (page === 'mood') loadMoodHistory();
+      if (page === 'diary') loadDiary();
+    }
+
+    // 更新首页
+    function updateHome() {
+      const count = storage.get('chatCount') || 10;
+      const vip = storage.get('vip') || false;
+      document.getElementById('chatCount').textContent = vip ? '∞' : count;
+      document.getElementById('vipStatus').textContent = vip ? 'VIP' : '免费';
+      document.getElementById('vipStatus').style.color = vip ? '#fbbf24' : '#fff';
+    }
+
+    // AI回复
+    const replies = {
+      '想死': '我知道你现在很难，真的很难。但我在这里。',
+      '自杀': '听到你这样说，我很难过。你不是一个人。',
+      '哭': '哭吧，这里只有我和你。眼泪不是软弱。',
+      '累': '你已经很努力了。可以休息一下。',
+      '睡不着': '外面好像在下雨...闭上眼睛，我陪着你。',
+      '孤独': '你不是一个人。至少现在，有我在。',
+      '开心': '真好！能感受到你的开心 🌸',
+      '谢谢': '谢谢你愿意告诉我这些。',
+      '你好': '嗨，我在呢。有什么想说的吗？'
+    };
+
+    function getAIReply(msg) {
+      for (let k in replies) {
+        if (msg.includes(k)) return replies[k];
+      }
+      const defaults = ['我在。', '嗯，我在听。', '说吧，我听着呢。', '然后呢？'];
+      return defaults[Math.floor(Math.random() * defaults.length)];
+    }
+
+    // 发送消息
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      const vip = storage.get('vip');
+      let count = storage.get('chatCount') || 10;
+
+      if (!vip && count <= 0) {
+        alert('免费次数已用完，请升级VIP');
+        showPage('vip');
+        return;
+      }
+
+      // 添加用户消息
+      const box = document.getElementById('chatBox');
+      box.innerHTML += `<div class="message user">${msg}</div>`;
+      input.value = '';
+      box.scrollTop = box.scrollHeight;
+
+      // 减少次数
+      if (!vip) {
+        storage.set('chatCount', count - 1);
+        updateHome();
+      }
+
+      // AI回复
+      setTimeout(() => {
+        const reply = getAIReply(msg);
+        box.innerHTML += `<div class="message ai">${reply}</div>`;
+        box.scrollTop = box.scrollHeight;
+      }, 500);
+    }
+
+    // 保存情绪
+    function saveMood(label, score, emoji) {
+      const history = storage.get('moodHistory') || [];
+      history.unshift({
+        label, score, emoji,
+        date: new Date().toLocaleString('zh-CN'),
+        id: Date.now()
+      });
+      storage.set('moodHistory', history.slice(0, 30));
+      alert(`情绪已记录：${emoji} ${label}`);
+      loadMoodHistory();
+    }
+
+    // 加载情绪历史
+    function loadMoodHistory() {
+      const history = storage.get('moodHistory') || [];
+      const div = document.getElementById('moodHistory');
+      if (history.length === 0) {
+        div.innerHTML = '<p style="color:#64748b;text-align:center;">还没有记录</p>';
+        return;
+      }
+      div.innerHTML = '<h4 style="margin-bottom:10px;">最近记录</h4>' + 
+        history.slice(0, 7).map(h => `
+          <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(255,255,255,0.05);border-radius:8px;margin:5px 0;">
+            <span>${h.emoji} ${h.label}</span>
+            <span style="color:#64748b;font-size:12px;">${h.date.split(' ')[0]}</span>
+          </div>
+        `).join('');
+    }
+
+    // 音频生成器
+    let audioCtx = null;
+    let currentSource = null;
+    let gainNode = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        gainNode = audioCtx.createGain();
+        gainNode.connect(audioCtx.destination);
+        gainNode.gain.value = 0.5;
+      }
+    }
+
+    function playSound(type) {
+      initAudio();
+      if (currentSource) {
+        currentSource.stop();
+        currentSource = null;
+        document.querySelectorAll('[id$="Status"]').forEach(s => s.textContent = '');
+        return;
+      }
+
+      const bufferSize = 2 * audioCtx.sampleRate;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = buffer.getChannelData(0);
+
+      if (type === 'rain') {
+        // 粉红噪音
+        let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+        for (let i=0; i<bufferSize; i++) {
+          const white = Math.random()*2-1;
+          b0=0.99886*b0+white*0.0555179;
+          b1=0.99332*b1+white*0.0750759;
+          b2=0.96900*b2+white*0.1538520;
+          b3=0.86650*b3+white*0.3104856;
+          b4=0.55000*b4+white*0.5329522;
+          b5=-0.7616*b5-white*0.0168980;
+          output[i]=(b0+b1+b2+b3+b4+b5+b6+white*0.5362)*0.11;
+          b6=white*0.115926;
+        }
+      } else if (type === 'ocean') {
+        // 布朗噪音
+        let last=0;
+        for (let i=0; i<bufferSize; i++) {
+          const white = Math.random()*2-1;
+          output[i]=(last+0.02*white)/1.02;
+          last=output[i];
+          output[i]*=3.5;
+        }
+      } else if (type === 'forest') {
+        // 风声
+        for (let i=0; i<bufferSize; i++) {
+          output[i]=(Math.random()*2-1)*0.1;
+        }
+      } else if (type === 'cafe') {
+        // 咖啡馆背景
+        for (let i=0; i<bufferSize; i++) {
+          output[i]=(Math.random()*2-1)*0.05;
+        }
+      }
+
+      currentSource = audioCtx.createBufferSource();
+      currentSource.buffer = buffer;
+      currentSource.loop = true;
+      currentSource.connect(gainNode);
+      currentSource.start();
+
+      document.getElementById(type+'Status').textContent = ' 🔊 播放中';
+    }
+
+    function setVolume(v) {
+      if (gainNode) gainNode.gain.value = v/100;
+    }
+
+    // 日记
+    function saveDiary() {
+      const text = document.getElementById('diaryInput').value.trim();
+      if (!text) return;
+      const diaries = storage.get('diaries') || [];
+      diaries.unshift({
+        text,
+        date: new Date().toLocaleString('zh-CN'),
+        id: Date.now()
+      });
+      storage.set('diaries', diaries.slice(0, 100));
+      document.getElementById('diaryInput').value = '';
+      loadDiary();
+    }
+
+    function loadDiary() {
+      const diaries = storage.get('diaries') || [];
+      const div = document.getElementById('diaryList');
+      if (diaries.length === 0) {
+        div.innerHTML = '<p style="color:#64748b;text-align:center;">还没有日记</p>';
+        return;
+      }
+      div.innerHTML = diaries.slice(0, 10).map(d => `
+        <div style="padding:15px;background:rgba(255,255,255,0.05);border-radius:12px;margin:10px 0;">
+          <div style="color:#64748b;font-size:12px;margin-bottom:8px;">${d.date}</div>
+          <div style="color:#e0e0e0;font-size:14px;line-height:1.6;">${d.text}</div>
+        </div>
+      `).join('');
+    }
+
+    // VIP激活
+    function activateVIP() {
+      const code = document.getElementById('vipCode').value.trim().toUpperCase();
+      const validCodes = ['XINYU666', 'XINYU888', 'DEV2026', 'FREEVIP', 'OWNER2026'];
+      if (validCodes.includes(code)) {
+        storage.set('vip', true);
+        storage.set('vipCode', code);
+        alert('🎉 VIP激活成功！');
+        updateHome();
+        showPage('home');
+      } else {
+        alert('激活码无效');
+      }
+    }
+
+    // 初始化
+    updateHome();
+  </script>
+</body>
+</html>

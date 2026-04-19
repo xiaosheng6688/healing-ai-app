@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1a1a2e" />
+  <meta name="description" content="为你好心语 - AI情绪陪伴，温暖治愈你的每一个夜晚" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="心语" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>为你好心语 · AI陪伴</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+  <script>
+    // 注册Service Worker (PWA支持)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('SW registered'))
+          .catch(err => console.log('SW registration failed'));
+      });
+    }
+    // 开发者模式检测
+    if (location.search.includes('dev=1') || location.hash === '#dev') {
+      localStorage.setItem('xinyu_uid', 'owner');
+      localStorage.setItem('xinyu_dev', 'true');
+      localStorage.setItem('vip_expires', '2126-12-31T23:59:59.999Z');
+      console.log('开发者模式已激活');
+    }
+  </script>
+</body>
+</html>

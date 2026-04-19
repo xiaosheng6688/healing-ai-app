@@ -1,0 +1,306 @@
+/* @import must precede all statements */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0f1a2a 100%);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.4); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(168, 85, 247, 0.6); }
+
+/* 雨夜背景 */
+.rain-bg {
+  background: linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 40%, #16213e 70%, #0f3460 100%) !important;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* 玻璃拟态 */
+.glass {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* 对话气泡 */
+.bubble-ai {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px 20px 20px 4px;
+  color: #e2d9f3;
+  padding: 14px 18px;
+  max-width: 85%;
+  font-size: 15px;
+  line-height: 1.8;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.bubble-user {
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6366f1 100%);
+  border-radius: 20px 20px 4px 20px;
+  color: white;
+  padding: 14px 18px;
+  max-width: 85%;
+  font-size: 15px;
+  line-height: 1.8;
+  margin-left: auto;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+}
+
+/* VIP徽章 */
+.vip-badge {
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+}
+
+/* 打字动画 */
+@keyframes typing { 
+  0%, 100% { opacity: 1; } 
+  50% { opacity: 0.3; } 
+}
+.typing-dot { animation: typing 1.4s ease-in-out infinite; }
+
+/* 脉冲按钮 */
+@keyframes pulse-soft {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
+  50% { box-shadow: 0 0 0 16px rgba(168, 85, 247, 0); }
+}
+.btn-pulse { animation: pulse-soft 2.5s ease-in-out infinite; }
+
+/* 雨滴动画 - 多层次 */
+@keyframes raindrop {
+  0% { 
+    transform: translateY(-30px) translateX(0); 
+    opacity: 0; 
+  }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.3; }
+  100% { 
+    transform: translateY(100vh) translateX(-20px); 
+    opacity: 0; 
+  }
+}
+
+.raindrop {
+  position: absolute;
+  width: 2px;
+  height: 25px;
+  background: linear-gradient(180deg, transparent, rgba(150, 200, 255, 0.6), rgba(100, 180, 255, 0.3));
+  border-radius: 0 0 2px 2px;
+  animation: raindrop linear infinite;
+  pointer-events: none;
+}
+
+/* 大雨滴 */
+.raindrop-lg {
+  width: 3px;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, rgba(180, 220, 255, 0.7));
+}
+
+/* 海浪动画 */
+@keyframes wave {
+  0% { transform: translateX(0) scaleY(1); }
+  50% { transform: translateX(-25px) scaleY(0.95); }
+  100% { transform: translateX(0) scaleY(1); }
+}
+
+@keyframes wave2 {
+  0% { transform: translateX(0) scaleY(1); }
+  50% { transform: translateX(25px) scaleY(1.05); }
+  100% { transform: translateX(0) scaleY(1); }
+}
+
+.wave-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  bottom: -5px;
+  left: -10%;
+  width: 120%;
+  height: 100px;
+  background: linear-gradient(180deg, transparent 0%, rgba(15, 52, 96, 0.3) 50%, rgba(22, 33, 62, 0.5) 100%);
+  border-radius: 100% 100% 0 0;
+  animation: wave 8s ease-in-out infinite;
+}
+
+.wave::before {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  left: 5%;
+  width: 90%;
+  height: 60px;
+  background: linear-gradient(180deg, transparent, rgba(30, 60, 100, 0.2));
+  border-radius: 100% 100% 0 0;
+  animation: wave2 6s ease-in-out infinite;
+}
+
+.wave::after {
+  content: '';
+  position: absolute;
+  bottom: 20px;
+  left: 15%;
+  width: 70%;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, rgba(50, 80, 120, 0.15));
+  border-radius: 100% 100% 0 0;
+  animation: wave 4s ease-in-out infinite reverse;
+}
+
+/* 闪烁的星星 */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.2); }
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* 月光效果 */
+.moon-glow {
+  position: fixed;
+  top: 40px;
+  right: 30px;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(200, 220, 255, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 云朵飘动 */
+@keyframes float-cloud {
+  0%, 100% { transform: translateX(0); opacity: 0.3; }
+  50% { transform: translateX(30px); opacity: 0.5; }
+}
+
+.cloud {
+  position: absolute;
+  background: rgba(100, 130, 160, 0.15);
+  border-radius: 50%;
+  filter: blur(30px);
+  animation: float-cloud ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* 渐变文字 */
+.text-gradient {
+  background: linear-gradient(135deg, #a855f7, #ec4899, #f43f5e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 入场动画 */
+@keyframes fadeInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* 呼吸灯效果 */
+@keyframes breathe {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.breathing {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* 闪电效果 */
+@keyframes lightning {
+  0%, 90%, 100% { opacity: 0; }
+  92%, 94%, 96% { opacity: 0.8; }
+}
+
+.lightning {
+  position: fixed;
+  inset: 0;
+  background: rgba(200, 220, 255, 0.1);
+  pointer-events: none;
+  z-index: 100;
+  animation: lightning 10s infinite;
+}
+
+/* 输入框聚焦效果 */
+input:focus, textarea:focus {
+  outline: none;
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+/* 按钮按下效果 */
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* 深色模式滚动条 */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* 选择文本颜色 */
+::selection {
+  background: rgba(168, 85, 247, 0.3);
+  color: white;
+}
+
+/* 移动端优化 */
+@media (max-width: 640px) {
+  .bubble-ai, .bubble-user {
+    max-width: 88%;
+    font-size: 14px;
+    padding: 12px 14px;
+  }
+  
+  .glass {
+    border-radius: 16px;
+  }
+}
