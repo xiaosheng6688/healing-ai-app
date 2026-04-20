@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>为你好心语 - 部署步骤</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 40px 20px;
+        }
+        .container { max-width: 600px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 28px; }
+        .subtitle { text-align: center; color: #a855f7; margin-bottom: 40px; }
+        .step {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .step-num {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+        .step-title { font-size: 18px; margin-bottom: 12px; }
+        .step-content { color: #9ca3af; line-height: 1.8; }
+        .step-content a { color: #a855f7; }
+        .highlight {
+            background: rgba(168,85,247,0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #fff;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+        .file-box {
+            background: rgba(0,0,0,0.3);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .success {
+            text-align: center;
+            padding: 40px;
+            background: rgba(34,197,94,0.1);
+            border: 1px solid rgba(34,197,94,0.3);
+            border-radius: 16px;
+        }
+        .success-icon { font-size: 48px; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌸 为你好心语</h1>
+        <p class="subtitle">GitHub Pages 部署指南</p>
+
+        <div class="step">
+            <div class="step-title"><span class="step-num">1</span>注册 GitHub 账号</div>
+            <div class="step-content">
+                如果你还没有 GitHub 账号：<br>
+                1. 打开 <a href="https://github.com/signup" target="_blank">github.com/signup</a><br>
+                2. 输入邮箱、设置密码、选择用户名<br>
+                3. 完成邮箱验证<br>
+                <br>
+                <em>如果已有账号，直接跳到第2步</em>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title"><span class="step-num">2</span>创建新仓库</div>
+            <div class="step-content">
+                1. 登录 GitHub 后，点击右上角 <span class="highlight">+</span> 号<br>
+                2. 选择 <span class="highlight">New repository</span><br>
+                3. 填写信息：<br>
+                &nbsp;&nbsp;• Repository name: <span class="highlight">healing-ai-app</span><br>
+                &nbsp;&nbsp;• Description: AI情绪陪伴应用（可选）<br>
+                &nbsp;&nbsp;• 选择 <span class="highlight">Public</span><br>
+                &nbsp;&nbsp;• 勾选 <span class="highlight">Add a README file</span><br>
+                4. 点击 <span class="highlight">Create repository</span>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title"><span class="step-num">3</span>上传文件</div>
+            <div class="step-content">
+                文件位置：<br>
+                <div class="file-box">
+                    C:\Users\Administrator\.qclaw\workspace\healing-ai-app\docs\index.html
+                </div>
+                <br>
+                操作步骤：<br>
+                1. 在新仓库页面，点击 <span class="highlight">Add file</span><br>
+                2. 选择 <span class="highlight">Upload files</span><br>
+                3. 把上面的 <span class="highlight">index.html</span> 文件拖进去<br>
+                4. 点击 <span class="highlight">Commit changes</span>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-title"><span class="step-num">4</span>启用 GitHub Pages</div>
+            <div class="step-content">
+                1. 点击仓库顶部的 <span class="highlight">Settings</span> 标签<br>
+                2. 左侧菜单点击 <span class="highlight">Pages</span><br>
+                3. Source 部分选择 <span class="highlight">Deploy from a branch</span><br>
+                4. Branch 选择 <span class="highlight">main</span><br>
+                5. 文件夹选择 <span class="highlight">/ (root)</span><br>
+                6. 点击 <span class="highlight">Save</span><br>
+                <br>
+                等待 1-2 分钟，页面会显示你的链接
+            </div>
+        </div>
+
+        <div class="success">
+            <div class="success-icon">🎉</div>
+            <h2>部署完成！</h2>
+            <p style="color: #9ca3af; margin-top: 12px;">
+                你的链接将是：<br>
+                <span class="highlight">https://你的用户名.github.io/healing-ai-app/</span>
+            </p>
+            <a href="https://github.com/new" class="btn" target="_blank">开始创建仓库 →</a>
+        </div>
+
+        <div class="step" style="margin-top: 40px;">
+            <div class="step-title">💡 提示</div>
+            <div class="step-content">
+                • 部署完成后，任何设备都能访问你的应用<br>
+                • 修改文件后重新上传，网站会自动更新<br>
+                • 完全免费，无需服务器<br>
+                • 支持自定义域名（可选）
+            </div>
+        </div>
+    </div>
+</body>
+</html>
