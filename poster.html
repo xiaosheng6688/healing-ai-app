@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>为你好心语 - 推广海报</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    .poster {
+      width: 375px;
+      background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .poster::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(168,85,247,0.1) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+    .rain {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .drop {
+      position: absolute;
+      width: 1px;
+      height: 20px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.3));
+      animation: fall 2s linear infinite;
+    }
+    @keyframes fall {
+      to { transform: translateY(600px); }
+    }
+    .content { position: relative; z-index: 1; }
+    .emoji { font-size: 80px; margin-bottom: 20px; }
+    .title {
+      font-size: 28px;
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #a855f7;
+      margin-bottom: 30px;
+    }
+    .features {
+      text-align: left;
+      margin: 30px 0;
+      padding: 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 15px 0;
+      color: #e0e0e0;
+      font-size: 14px;
+    }
+    .feature-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .quote {
+      font-style: italic;
+      color: #94a3b8;
+      font-size: 13px;
+      margin: 25px 0;
+      padding: 15px;
+      border-left: 3px solid #a855f7;
+      background: rgba(168,85,247,0.1);
+      text-align: left;
+    }
+    .qr-section {
+      margin-top: 30px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 15px;
+    }
+    .qr-placeholder {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+      margin: 0 auto 15px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 12px;
+      position: relative;
+    }
+    .qr-code {
+      width: 100%;
+      height: 100%;
+      padding: 10px;
+    }
+    .qr-text {
+      color: #333;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .url {
+      margin-top: 15px;
+      padding: 10px;
+      background: rgba(168,85,247,0.2);
+      border-radius: 8px;
+      color: #a855f7;
+      font-size: 12px;
+      word-break: break-all;
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 15px;
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      color: #fff;
+      font-size: 12px;
+      border-radius: 20px;
+      margin-top: 15px;
+    }
+    .btn {
+      margin-top: 20px;
+      padding: 12px 40px;
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .btn:hover { transform: scale(1.05); }
+    
+    .tips {
+      margin-top: 30px;
+      color: #64748b;
+      font-size: 12px;
+      text-align: center;
+      max-width: 375px;
+    }
+    .tips h4 { color: #94a3b8; margin-bottom: 10px; }
+    .tips p { margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="poster" id="poster">
+    <div class="rain" id="rain"></div>
+    <div class="content">
+      <div class="emoji">🌧️</div>
+      <h1 class="title">为你好心语</h1>
+      <p class="subtitle">AI情绪陪伴 · 温暖每个夜晚</p>
+      
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">💬</div>
+          <span>深夜陪聊，温柔倾听不打烊</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🎵</div>
+          <span>雨声海浪，沉浸式冥想放松</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📔</div>
+          <span>情绪日记，记录心路历程</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">✨</div>
+          <span>免费体验10次，随时开始</span>
+        </div>
+      </div>
+      
+      <div class="quote">
+        "窗外的雨声很轻，<br>像在陪你一起难过。"
+      </div>
+      
+      <div class="qr-section">
+        <div class="qr-placeholder">
+          <canvas id="qrcode" width="130" height="130"></canvas>
+        </div>
+        <p class="qr-text">扫码立即体验</p>
+        <div class="url">https://healing-ai-app-smoky.vercel.app</div>
+      </div>
+      
+      <span class="badge">🎁 限时免费体验</span>
+    </div>
+  </div>
+  
+  <button class="btn" onclick="downloadPoster()">📸 保存海报</button>
+  
+  <div class="tips">
+    <h4>💡 推广小贴士</h4>
+    <p>1. 截图保存海报 → 发朋友圈/小红书</p>
+    <p>2. 最佳发布时间：晚上9点-12点</p>
+    <p>3. 配文案：深夜emo的时候发现的...</p>
+    <p>4. 每10个访问约1个会注册</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script>
+    // 生成雨滴
+    const rain = document.getElementById('rain');
+    for (let i = 0; i < 20; i++) {
+      const drop = document.createElement('div');
+      drop.className = 'drop';
+      drop.style.left = Math.random() * 100 + '%';
+      drop.style.animationDelay = Math.random() * 2 + 's';
+      drop.style.animationDuration = (1.5 + Math.random()) + 's';
+      rain.appendChild(drop);
+    }
+    
+    // 生成二维码
+    new QRCode(document.getElementById('qrcode'), {
+      text: 'https://healing-ai-app-smoky.vercel.app',
+      width: 130,
+      height: 130,
+      colorDark: '#1a1a2e',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    
+    // 下载海报
+    function downloadPoster() {
+      const btn = document.querySelector('.btn');
+      const tips = document.querySelector('.tips');
+      btn.style.display = 'none';
+      tips.style.display = 'none';
+      
+      html2canvas(document.getElementById('poster'), {
+        backgroundColor: '#0a0a1a',
+        scale: 2
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = '为你好心语-推广海报.png';
+        link.href = canvas.toDataURL();
+        link.click();
+        
+        btn.style.display = 'block';
+        tips.style.display = 'block';
+      });
+    }
+  </script>
+</body>
+</html>
