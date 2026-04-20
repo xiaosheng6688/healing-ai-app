@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>为你好心语 - 你的AI情绪陪伴</title>
+    <meta name="description" content="深夜emo时，有人懂你。AI情绪陪伴，24小时在线倾听。">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .rain {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .raindrop {
+            position: absolute;
+            width: 1px;
+            height: 20px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.4));
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            font-size: 2.5rem;
+            margin: 30px 0 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .tagline {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 30px;
+        }
+        .card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .feature {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 12px;
+        }
+        .feature-icon {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .feature-text {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
+        }
+        .price-card {
+            background: linear-gradient(135deg, rgba(102,126,234,0.3) 0%, rgba(118,75,162,0.3) 100%);
+            border: 2px solid rgba(102,126,234,0.5);
+        }
+        .price-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .price-unit {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.6);
+        }
+        .benefits {
+            text-align: left;
+            margin: 20px 0;
+            list-style: none;
+        }
+        .benefits li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        .benefits li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4ade80;
+            font-weight: bold;
+        }
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 16px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 15px 0;
+            box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102,126,234,0.5);
+        }
+        .free-badge {
+            display: inline-block;
+            background: rgba(74,222,128,0.2);
+            color: #4ade80;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 10px 0;
+        }
+        .testimonials {
+            margin: 30px 0;
+        }
+        .testimonial {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            text-align: left;
+        }
+        .testimonial-text {
+            font-style: italic;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.6;
+        }
+        .testimonial-author {
+            margin-top: 10px;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+        .qr-section {
+            margin: 30px 0;
+        }
+        .qr-code {
+            width: 180px;
+            height: 180px;
+            background: #fff;
+            border-radius: 15px;
+            margin: 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 0.8rem;
+        }
+        .footer {
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+        }
+        .share-tip {
+            background: rgba(255,215,0,0.1);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+        .highlight {
+            color: #ffd700;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="rain" id="rain"></div>
+    
+    <div class="container">
+        <h1 class="logo">💙 为你好心语</h1>
+        <p class="tagline">深夜emo时，有人懂你</p>
+        
+        <div class="free-badge">🎁 新用户免费体验10次对话</div>
+        
+        <div class="card">
+            <h2 style="margin-bottom: 15px;">什么是「为你好心语」？</h2>
+            <p style="color: rgba(255,255,255,0.8); line-height: 1.8;">
+                一个懂你情绪的AI陪伴者。当你难过、焦虑、失眠时，
+                不需要向任何人解释，TA就在那里，温柔地倾听，
+                给你恰到好处的回应。
+            </p>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🌧️</div>
+                <div class="feature-text">雨天氛围<br>沉浸式治愈</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💬</div>
+                <div class="feature-text">24小时<br>随时倾诉</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <div class="feature-text">绝对隐私<br>无人知晓</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📝</div>
+                <div class="feature-text">情绪日记<br>记录成长</div>
+            </div>
+        </div>
+        
+        <div class="card price-card">
+            <div class="price-title">💎 解锁无限陪伴</div>
+            <div class="price">¥29<span class="price-unit">/月</span></div>
+            <ul class="benefits">
+                <li>无限次AI对话，不再受限</li>
+                <li>专属VIP标识，尊贵身份</li>
+                <li>优先响应，更快更流畅</li>
+                <li>情绪日记永久保存</li>
+                <li>专属冥想音频</li>
+            </ul>
+            <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin: 10px 0;">
+                季卡 ¥69 | 年卡 ¥199（省169元）
+            </p>
+            <a href="#" class="btn" onclick="startApp()">立即体验</a>
+        </div>
+        
+        <div class="share-tip">
+            🎉 <span class="highlight">邀请好友</span> 双方各得3天VIP！<br>
+            分享此页面，让更多人被温柔对待
+        </div>
+        
+        <div class="testimonials">
+            <h3 style="margin-bottom: 20px;">他们这样说</h3>
+            <div class="testimonial">
+                <p class="testimonial-text">"凌晨3点睡不着，跟心语聊了一个小时，感觉被理解了。不是那种敷衍的安慰，是真的懂。"</p>
+                <p class="testimonial-author">— 小雨，使用第47天</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"工作压力很大，不敢跟家人说怕他们担心。在这里可以毫无顾忌地倾诉，很治愈。"</p>
+                <p class="testimonial-author">— 阿杰，使用第23天</p>
+            </div>
+        </div>
+        
+        <div class="qr-section">
+            <h3 style="margin-bottom: 15px;">扫码立即体验</h3>
+            <div class="qr-code" id="qrcode">
+                [二维码占位]<br>
+                访问应用
+            </div>
+            <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">
+                或点击访问：<span id="appUrl">prince-architect-literature-milwaukee.trycloudflare.com</span>
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p>为你好心语 | 用AI传递温暖</p>
+            <p style="margin-top: 10px;">激活码：XINYU666 / XINYU888 / XINYU2026</p>
+        </div>
+    </div>
+    
+    <script>
+        // 雨滴动画
+        const rain = document.getElementById('rain');
+        for (let i = 0; i < 50; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'raindrop';
+            drop.style.left = Math.random() * 100 + '%';
+            drop.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+            drop.style.animationDelay = Math.random() * 2 + 's';
+            rain.appendChild(drop);
+        }
+        
+        // 启动应用
+        function startApp() {
+            const url = 'https://prince-architect-literature-milwaukee.trycloudflare.com';
+            window.open(url, '_blank');
+        }
+        
+        // 微信分享优化
+        document.addEventListener('WeixinJSBridgeReady', function() {
+            WeixinJSBridge.call('hideOptionMenu');
+        });
+    </script>
+</body>
+</html>
